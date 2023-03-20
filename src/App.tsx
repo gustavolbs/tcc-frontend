@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AppRoutes } from "./routes";
+import "./index.css";
 
 export const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
