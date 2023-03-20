@@ -1,10 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { PrivateRoute } from "./components/PrivateRoute";
-import { LoginForm } from "./components/LoginForm";
-import { RegisterForm } from "./components/RegisterForm";
-import { HomePage } from "./components/HomePage";
+import { HomePage } from "./views/HomePage";
+import { LoginForm } from "./views/LoginForm";
+import { RegisterForm } from "./views/RegisterForm";
 
 interface RoutesProps {
   isAuthenticated: boolean;
@@ -16,21 +16,19 @@ export const AppRoutes: React.FC<RoutesProps> = ({
   onLogin,
 }) => {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginForm onLogin={onLogin} />} />
         <Route path="/register" element={<RegisterForm onLogin={onLogin} />} />
         <Route
           path="/"
           element={
-            <PrivateRoute
-              path="/"
-              isAuthenticated={isAuthenticated}
-              element={<HomePage />}
-            />
+            <PrivateRoute isAuthenticated={isAuthenticated}>
+              <HomePage />
+            </PrivateRoute>
           }
         />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 };

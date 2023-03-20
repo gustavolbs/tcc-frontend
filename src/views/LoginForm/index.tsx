@@ -6,9 +6,9 @@ import "./index.scss";
 import emailSVG from "../../assets/email.svg";
 import keySVG from "../../assets/key.svg";
 import logoSVG from "../../assets/logo.svg";
-import { Link } from "react-router-dom";
-import { LabelLayout } from "../LabelLayout";
-import { ButtonLayout } from "../ButtonLayout";
+import { Link, useNavigate } from "react-router-dom";
+import { ButtonLayout } from "../../components/ButtonLayout";
+import { LabelLayout } from "../../components/LabelLayout";
 
 interface LoginFormProps {
   onLogin: (token: string) => void;
@@ -20,6 +20,7 @@ interface Credentials {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState<Credentials>({
     email: "",
     password: "",
@@ -39,6 +40,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       const { data } = await api.login(credentials);
       const token = data.token;
       onLogin(token);
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
@@ -50,7 +52,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         <ReactSVG src={logoSVG} />
         <hr />
         <h2>Entrar</h2>
-        <form className="login-form" onSubmit={handleSubmit}>
+        <form className="auth-form" onSubmit={handleSubmit}>
           <LabelLayout htmlFor="email">
             <ReactSVG src={emailSVG} />
             <input

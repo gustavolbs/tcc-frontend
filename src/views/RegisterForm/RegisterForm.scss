@@ -1,0 +1,18 @@
+.grid-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
+}
+
+.recovery {
+  cursor: pointer;
+  opacity: 1;
+}
+
+@media only screen and (max-width: 500px) {
+  .grid-row {
+    grid-template-columns: repeat(1, 2fr);
+  }
+}

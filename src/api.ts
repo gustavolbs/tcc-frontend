@@ -25,7 +25,7 @@ export const createApiClient = (): ApiClient => {
     api.get<City[]>("/cities");
 
   const createUser = (user: User): Promise<AxiosResponse> =>
-    api.post("/users", user);
+    api.post("/api/auth/register", user);
 
   return {
     login,

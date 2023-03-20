@@ -16,4 +16,16 @@ button {
 
   color: #ffffff;
   cursor: pointer;
+
+  &:hover {
+    background: #044bbd;
+    transition: 200ms all ease-in-out;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  button {
+    font-size: 12px;
+    line-height: 19px;
+  }
 }

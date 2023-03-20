@@ -1,6 +1,6 @@
 .container {
   background-color: #0062ff;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,8 +16,8 @@
   justify-content: center;
   align-items: center;
   padding: 36px 92px;
-  width: fit-content;
-  min-width: 460px;
+  width: 100%;
+  max-width: 600px;
 
   hr {
     width: 100%;
@@ -42,7 +42,7 @@
   }
 }
 
-.login-form {
+.auth-form {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -80,4 +80,30 @@
   color: #ffffff;
   text-decoration: none;
   margin-top: 80px;
+}
+
+@media only screen and (max-width: 768px) {
+  .box {
+    width: 100%;
+    max-width: 80vw;
+    padding: 36px 48px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .box {
+    max-width: 95vw;
+    padding: 36px 16px;
+
+    h2 {
+      font-size: 24px;
+      line-height: 32px;
+    }
+  }
+
+  .recovery,
+  .register {
+    font-size: 12px;
+    line-height: 21px;
+  }
 }
