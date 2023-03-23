@@ -29,14 +29,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  const [cities, setCities] = useState<City[]>([
-    {
-      id: 1,
-      latitude: 2,
-      longitude: 3,
-      name: "teste",
-    },
-  ]);
+  const [cities, setCities] = useState<City[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
