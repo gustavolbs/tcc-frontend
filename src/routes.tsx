@@ -1,7 +1,14 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { useUser } from "./contexts/UserContext";
+
+import { AdminRoute } from "./components/AdminRoute";
 import { PrivateRoute } from "./components/PrivateRoute";
+import { Sidebar } from "./components/Sidebar";
+
+import { CityMembers } from "./views/City/Members";
+import { CreateCity } from "./views/City/Create";
 import { HomePage } from "./views/HomePage";
 import { LoginForm } from "./views/LoginForm";
 import { RegisterForm } from "./views/RegisterForm";
@@ -15,19 +22,57 @@ export const AppRoutes: React.FC<RoutesProps> = ({
   isAuthenticated,
   onLogin,
 }) => {
+  const { user } = useUser();
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginForm onLogin={onLogin} />} />
-        <Route path="/register" element={<RegisterForm onLogin={onLogin} />} />
         <Route
-          path="/"
+          path="/login"
           element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <HomePage />
-            </PrivateRoute>
+            !user ? (
+              <LoginForm onLogin={onLogin} />
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
+        <Route
+          path="/register"
+          element={
+            !user ? (
+              <RegisterForm onLogin={onLogin} />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route element={<Sidebar />}>
+          <Route
+            path="/"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <HomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/city/members"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <CityMembers />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/city/create"
+            element={
+              <AdminRoute>
+                <CreateCity />
+              </AdminRoute>
+            }
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
