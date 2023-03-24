@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppRoutes } from "./routes";
+import L from "leaflet";
 
 import {
   checkAuthenticated,
@@ -10,6 +11,16 @@ import { CityProvider } from "./contexts/CityContext";
 
 import "./index.scss";
 import "leaflet/dist/leaflet.css";
+
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 export const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(
