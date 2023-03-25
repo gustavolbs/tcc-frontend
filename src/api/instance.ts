@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { notify } from "../helpers/notify";
 
 export const createAxiosInstance = () => {
   const api: AxiosInstance = axios.create({
@@ -14,6 +15,21 @@ export const createAxiosInstance = () => {
     }
     return config;
   });
+
+  api.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      const errorMsg = error.response?.data?.msg;
+      const errorMessage = error.response?.data?.message;
+      const errorError = error.response?.data?.error;
+
+      const err = errorMsg || errorMessage || errorError || "Erro desconhecido";
+      notify("error", err);
+      return Promise.reject(error);
+    }
+  );
 
   return api;
 };

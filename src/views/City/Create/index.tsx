@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { ReactSVG } from "react-svg";
 
 import { api } from "../../../api/client";
+import { notify } from "../../../helpers/notify";
 
 import { ButtonLayout } from "../../../components/ButtonLayout";
 import { LabelLayout } from "../../../components/LabelLayout";
@@ -45,6 +46,7 @@ export const CreateCity: React.FC = () => {
         longitude: (position as any)?.lng || (position as Array<number>)[1],
       });
 
+      notify("success", "Cidade criada com sucesso!");
       setCityName("");
       setPosition(BRAZIL_POSITION);
     } catch (error) {

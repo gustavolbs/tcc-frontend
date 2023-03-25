@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ReactSVG } from "react-svg";
 
 import { api } from "../../api/client";
+import { notify } from "../../helpers/notify";
 
 import { City } from "../../interfaces/city";
 import { LabelLayout } from "../../components/LabelLayout";

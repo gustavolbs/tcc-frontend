@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AppRoutes } from "./routes";
 import L from "leaflet";
+import { Toaster } from "react-hot-toast";
 
 import { checkAuthenticated, UserProvider } from "./contexts/UserContext";
 import { CityProvider } from "./contexts/CityContext";
@@ -49,6 +50,7 @@ export const App: React.FC = () => {
   return (
     <UserProvider isTokenValid={isTokenValid}>
       <CityProvider>
+        <Toaster />
         <AppRoutes isAuthenticated={isTokenValid} onLogin={handleLogin} />
       </CityProvider>
     </UserProvider>
