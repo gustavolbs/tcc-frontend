@@ -30,7 +30,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 export const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
+  const [isTokenSaved, setisTokenSaved] = useState(
     !!localStorage.getItem("myapp-token")
   );
 
@@ -41,24 +41,26 @@ export const App: React.FC = () => {
       const authenticated = await checkAuthenticated();
 
       if (authenticated) {
-        setIsAuthenticated(true);
+        setisTokenSaved(true);
       } else {
         logout();
       }
     };
 
-    check();
+    if (isTokenSaved) {
+      check();
+    }
   }, []);
 
   const handleLogin = (token: string) => {
     localStorage.setItem("myapp-token", token);
-    setIsAuthenticated(true);
+    setisTokenSaved(true);
   };
 
   return (
-    <UserProvider isAuthenticated={isAuthenticated}>
+    <UserProvider isAuthenticated={isTokenSaved}>
       <CityProvider>
-        <AppRoutes isAuthenticated={isAuthenticated} onLogin={handleLogin} />
+        <AppRoutes isAuthenticated={isTokenSaved} onLogin={handleLogin} />
       </CityProvider>
     </UserProvider>
   );
