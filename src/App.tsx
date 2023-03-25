@@ -12,12 +12,19 @@ import { CityProvider } from "./contexts/CityContext";
 import "./index.scss";
 import "leaflet/dist/leaflet.css";
 
-import icon from "leaflet/dist/images/marker-icon.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import iconUrl from "./assets/marker-icon.png";
+import shadowUrl from "./assets/marker-shadow.png";
+import iconRetinaUrl from "./assets/marker-icon-2x.png";
 
 let DefaultIcon = L.icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
+  iconUrl,
+  shadowUrl,
+  iconRetinaUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41],
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
