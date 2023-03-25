@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { api } from "../../api";
 import { ReactSVG } from "react-svg";
-import "./index.scss";
+import { Link, useNavigate } from "react-router-dom";
+
+import { api } from "../../api/client";
+
+import { ButtonLayout } from "../../components/ButtonLayout";
+import { LabelLayout } from "../../components/LabelLayout";
 
 import emailSVG from "../../assets/email.svg";
 import keySVG from "../../assets/key.svg";
 import logoSVG from "../../assets/logo.svg";
-import { Link, useNavigate } from "react-router-dom";
-import { ButtonLayout } from "../../components/ButtonLayout";
-import { LabelLayout } from "../../components/LabelLayout";
+
+import "./index.scss";
 
 interface LoginFormProps {
   onLogin: (token: string) => void;

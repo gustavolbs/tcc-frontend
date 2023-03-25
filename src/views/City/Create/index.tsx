@@ -3,7 +3,7 @@ import { LatLngExpression } from "leaflet";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { ReactSVG } from "react-svg";
 
-import { api } from "../../../api";
+import { api } from "../../../api/client";
 
 import { ButtonLayout } from "../../../components/ButtonLayout";
 import { LabelLayout } from "../../../components/LabelLayout";

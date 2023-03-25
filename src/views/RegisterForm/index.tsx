@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { ReactSVG } from "react-svg";
-import { api } from "../../api";
+
+import { api } from "../../api/client";
+
 import { City } from "../../interfaces/city";
-import "./RegisterForm.scss";
 import { LabelLayout } from "../../components/LabelLayout";
+import { ButtonLayout } from "../../components/ButtonLayout";
+
+import "./RegisterForm.scss";
+
 import emailSVG from "../../assets/email.svg";
 import keySVG from "../../assets/key.svg";
 import logoSVG from "../../assets/logo.svg";
-import { ButtonLayout } from "../../components/ButtonLayout";
 
 interface RegisterFormProps {
   onLogin: (token: string) => void;
@@ -44,6 +48,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
     try {
       const response = await api.createUser(data);
       const token = response.data.token;
+
+      notify("success", "Usuário criado com sucesso!");
       onLogin(token);
       navigate("/");
     } catch (error) {

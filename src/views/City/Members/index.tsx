@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
-import { api } from "../../../api";
+import { api } from "../../../api/client";
 
 import { LabelLayout } from "../../../components/LabelLayout";
 import { SelectLayout } from "../../../components/SelectLayout";

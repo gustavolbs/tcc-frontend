@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { api } from "../api";
+import { api } from "../api/client";
 
 import { useUser } from "./UserContext";
 
