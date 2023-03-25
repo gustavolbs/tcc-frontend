@@ -67,7 +67,7 @@ export const AppRoutes: React.FC<RoutesProps> = ({
           <Route
             path="/city/create"
             element={
-              <AdminRoute>
+              <AdminRoute isAuthenticated={isAuthenticated}>
                 <CreateCity />
               </AdminRoute>
             }
