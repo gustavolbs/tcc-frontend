@@ -20,9 +20,16 @@ export interface ApiClient {
 export const createApiClient = (): ApiClient => {
   const api: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
-    headers: {
-      Authorization: "Bearer " + localStorage.getItem("myapp-token"),
-    },
+  });
+
+  api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("myapp-token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      delete config.headers.Authorization;
+    }
+    return config;
   });
 
   const checkAuth = (): Promise<AxiosResponse> => api.get<User>("/auth/check");
