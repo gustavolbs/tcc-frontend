@@ -25,7 +25,7 @@ const UserContext = createContext<UserContextData>({
 export const useUser = () => useContext(UserContext);
 
 interface UserProviderProps extends React.PropsWithChildren {
-  isAuthenticated: boolean;
+  isTokenValid: boolean;
 }
 
 export const checkAuthenticated = async () => {
@@ -39,7 +39,7 @@ export const checkAuthenticated = async () => {
 };
 
 export const UserProvider: React.FC<UserProviderProps> = ({
-  isAuthenticated,
+  isTokenValid,
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -75,12 +75,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({
       }
     };
 
-    if (isAuthenticated) {
+    if (isTokenValid) {
       fetchUser();
     } else {
       logout();
     }
-  }, [isAuthenticated]);
+  }, [isTokenValid]);
 
   return (
     <UserContext.Provider

@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AppRoutes } from "./routes";
 import L from "leaflet";
 
-import {
-  checkAuthenticated,
-  UserProvider,
-  useUser,
-} from "./contexts/UserContext";
+import { checkAuthenticated, UserProvider } from "./contexts/UserContext";
 import { CityProvider } from "./contexts/CityContext";
 
 import "./index.scss";
@@ -30,37 +26,30 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 export const App: React.FC = () => {
-  const [isTokenSaved, setisTokenSaved] = useState(
+  const [isTokenValid, setIsTokenValid] = useState(
     !!localStorage.getItem("myapp-token")
   );
-
-  const { logout } = useUser();
 
   useEffect(() => {
     const check = async () => {
       const authenticated = await checkAuthenticated();
-
-      if (authenticated) {
-        setisTokenSaved(true);
-      } else {
-        logout();
-      }
+      setIsTokenValid(authenticated);
     };
 
-    if (isTokenSaved) {
+    if (isTokenValid) {
       check();
     }
   }, []);
 
   const handleLogin = (token: string) => {
     localStorage.setItem("myapp-token", token);
-    setisTokenSaved(true);
+    setIsTokenValid(true);
   };
 
   return (
-    <UserProvider isAuthenticated={isTokenSaved}>
+    <UserProvider isTokenValid={isTokenValid}>
       <CityProvider>
-        <AppRoutes isAuthenticated={isTokenSaved} onLogin={handleLogin} />
+        <AppRoutes isAuthenticated={isTokenValid} onLogin={handleLogin} />
       </CityProvider>
     </UserProvider>
   );
