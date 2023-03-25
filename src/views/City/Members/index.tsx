@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 
-import { api } from "../../../api";
+import { api } from "../../../api/client";
+import { notify } from "../../../helpers/notify";
 
 import { LabelLayout } from "../../../components/LabelLayout";
 import { SelectLayout } from "../../../components/SelectLayout";
@@ -45,6 +46,7 @@ export const CityMembers: React.FC = () => {
   ) => {
     try {
       await api.updateRole(member.email, event.target.value);
+      notify("success", `Cargo atualizado com sucesso!`);
     } catch (error) {
       console.error(error);
     }
