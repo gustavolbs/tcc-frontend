@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AppRoutes } from "./routes";
 import L from "leaflet";
 import { Toaster } from "react-hot-toast";
 
-import { checkAuthenticated, UserProvider } from "./contexts/UserContext";
+import { UserProvider } from "./contexts/UserContext";
 import { CityProvider } from "./contexts/CityContext";
 
 import "./index.scss";
@@ -30,17 +30,6 @@ export const App: React.FC = () => {
   const [isTokenValid, setIsTokenValid] = useState(
     !!localStorage.getItem("myapp-token")
   );
-
-  useEffect(() => {
-    const check = async () => {
-      const authenticated = await checkAuthenticated();
-      setIsTokenValid(authenticated);
-    };
-
-    if (isTokenValid) {
-      check();
-    }
-  }, []);
 
   const handleLogin = (token: string) => {
     localStorage.setItem("myapp-token", token);

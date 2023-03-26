@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { api } from "../api/client";
 
@@ -8,7 +8,6 @@ interface UserContextData {
   isAdmin: boolean;
   isLoading: boolean;
   isOwner: boolean;
-  login: (user: User) => void;
   logout: () => void;
   user: User | null;
 }
@@ -17,7 +16,6 @@ const UserContext = createContext<UserContextData>({
   isAdmin: false,
   isLoading: true,
   isOwner: false,
-  login: () => {},
   logout: () => {},
   user: null,
 });
@@ -28,63 +26,50 @@ interface UserProviderProps extends React.PropsWithChildren {
   isTokenValid: boolean;
 }
 
-export const checkAuthenticated = async () => {
-  try {
-    const response = await api.checkAuth();
-    return !!response;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export const checkAuthenticated = (isTokenValid: boolean) => {
+  const response = api.checkAuth(isTokenValid);
+  return response;
 };
 
 export const UserProvider: React.FC<UserProviderProps> = ({
   isTokenValid,
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const login = (user: User) => {
-    setUser(user);
-  };
+  const {
+    data: authenticated,
+    isError: isCheckError,
+    isLoading: isCheckLoading,
+  } = api.checkAuth(isTokenValid);
+  const { data: user, isError, isLoading } = api.getMe(isTokenValid);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const logout = () => {
-    setUser(null);
     localStorage.removeItem("myapp-token");
+    setCurrentUser(null);
   };
+
+  useEffect(() => {
+    if (user && localStorage.getItem("myapp-token")) {
+      setCurrentUser(user);
+    }
+  }, [user]);
 
   const isAdmin = user?.role === "admin";
   const isOwner = user?.role === "owner";
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const authenticated = await checkAuthenticated();
-      if (!authenticated) {
-        // redireciona o usuário para a página de login ou exibe uma mensagem de erro
-        return;
-      }
-
-      try {
-        const { data } = await api.getMe();
-        login(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-        setIsLoading(false);
-      }
-    };
-
-    if (isTokenValid) {
-      fetchUser();
-    } else {
-      logout();
-    }
-  }, [isTokenValid]);
+  if (isCheckError) {
+    logout();
+  }
 
   return (
     <UserContext.Provider
-      value={{ isAdmin, isLoading, isOwner, login, logout, user }}
+      value={{
+        isAdmin,
+        isLoading,
+        isOwner,
+        logout,
+        user: currentUser,
+      }}
     >
       {children}
     </UserContext.Provider>

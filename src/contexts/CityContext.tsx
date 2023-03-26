@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 
 import { api } from "../api/client";
 
@@ -20,24 +20,11 @@ export const CityProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const { user } = useUser();
-  const [city, setCity] = useState<City | null>(null);
-
-  useEffect(() => {
-    async function fetchCity() {
-      if (user) {
-        try {
-          const { data } = await api.getCity(Number(user?.city));
-          setCity(data);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-
-    fetchCity();
-  }, [user]);
+  const { data: city, isError, isLoading } = api.getCity(Number(user?.city));
 
   return (
-    <CityContext.Provider value={{ city }}>{children}</CityContext.Provider>
+    <CityContext.Provider value={{ city: city || null }}>
+      {children}
+    </CityContext.Provider>
   );
 };
