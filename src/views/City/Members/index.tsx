@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ReactSVG } from "react-svg";
 
 import { api } from "../../../api/client";
@@ -19,22 +19,11 @@ export const CityMembers: React.FC = () => {
   const { user, isAdmin, isOwner } = useUser();
   const [search, setSearch] = useState("");
 
-  const [members, setMembers] = useState<User[]>([]);
-
-  useEffect(() => {
-    async function fetchCityMembers() {
-      try {
-        const { data } = await api.getCityMembers(Number(user?.city));
-        setMembers(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    if (user?.city) {
-      fetchCityMembers();
-    }
-  }, [user?.city]);
+  const {
+    data: members,
+    isError,
+    isLoading,
+  } = api.getCityMembers(Number(user?.city));
 
   const availableRoles = ["resident", "manager", "owner"];
 
@@ -86,7 +75,7 @@ export const CityMembers: React.FC = () => {
 
             <tbody>
               {members
-                .filter((person) => person.email.includes(search))
+                ?.filter((person) => person.email.includes(search))
                 .map((member) => (
                   <tr key={member.id}>
                     <td>{member.id}</td>

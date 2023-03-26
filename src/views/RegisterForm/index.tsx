@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { ReactSVG } from "react-svg";
@@ -6,7 +6,6 @@ import { ReactSVG } from "react-svg";
 import { api } from "../../api/client";
 import { notify } from "../../helpers/notify";
 
-import { City } from "../../interfaces/city";
 import { LabelLayout } from "../../components/LabelLayout";
 import { ButtonLayout } from "../../components/ButtonLayout";
 
@@ -34,16 +33,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  const [cities, setCities] = useState<City[]>([]);
+  const { data: cities, isError, isLoading } = api.getCities();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function fetchCities() {
-      const { data } = await api.getCities();
-      setCities(data);
-    }
-    fetchCities();
-  }, []);
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -131,7 +122,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
               className={`form-input${errors.city ? " has-error" : ""}`}
             >
               <option value="">Selecione uma cidade</option>
-              {cities.map((city) => (
+              {cities?.map((city) => (
                 <option key={city.id} value={city.id}>
                   {city.name}
                 </option>

@@ -1,11 +1,11 @@
 import { AxiosResponse } from "axios";
 
-import { axiosInstance } from "../instance";
+import { axiosInstance, useFetch } from "../instance";
 
 import { User } from "../../interfaces/user";
 
-export const getMe = (): Promise<AxiosResponse<User>> =>
-  axiosInstance.get<User>("/users/me");
+export const getMe = (isTokenValid: boolean) =>
+  useFetch<User>(isTokenValid ? "/users/me" : null);
 
 export const updateRole = (
   email: string,
