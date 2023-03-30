@@ -12,6 +12,8 @@ import { CreateCity } from "./views/City/Create";
 import { HomePage } from "./views/HomePage";
 import { LoginForm } from "./views/LoginForm";
 import { RegisterForm } from "./views/RegisterForm";
+import { RegisterIssue } from "./views/Issue/Create";
+import { ViewIssue } from "./views/Issue/View";
 
 interface RoutesProps {
   isAuthenticated: boolean;
@@ -29,23 +31,11 @@ export const AppRoutes: React.FC<RoutesProps> = ({
       <Routes>
         <Route
           path="/login"
-          element={
-            !user ? (
-              <LoginForm onLogin={onLogin} />
-            ) : (
-              <Navigate to="/" replace />
-            )
-          }
+          element={!user && <LoginForm onLogin={onLogin} />}
         />
         <Route
           path="/register"
-          element={
-            !user ? (
-              <RegisterForm onLogin={onLogin} />
-            ) : (
-              <Navigate to="/" replace />
-            )
-          }
+          element={!user && <RegisterForm onLogin={onLogin} />}
         />
         <Route element={<Sidebar />}>
           <Route
@@ -61,6 +51,22 @@ export const AppRoutes: React.FC<RoutesProps> = ({
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <CityMembers />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/issue/create"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <RegisterIssue />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/issue/:issueId"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <ViewIssue />
               </PrivateRoute>
             }
           />

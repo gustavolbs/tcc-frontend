@@ -5,6 +5,7 @@ import { ReactSVG } from "react-svg";
 
 import { api } from "../../../api/client";
 import { notify } from "../../../helpers/notify";
+import { BRAZIL_POSITION } from "../../../helpers/brazil-position";
 
 import { ButtonLayout } from "../../../components/ButtonLayout";
 import { LabelLayout } from "../../../components/LabelLayout";
@@ -12,8 +13,6 @@ import { LabelLayout } from "../../../components/LabelLayout";
 import keySVG from "../../../assets/key.svg";
 
 import "./index.scss";
-
-const BRAZIL_POSITION = [-14.4095261, -51.31668] as LatLngExpression;
 
 export const CreateCity: React.FC = () => {
   const [position, setPosition] = useState<LatLngExpression>(BRAZIL_POSITION);

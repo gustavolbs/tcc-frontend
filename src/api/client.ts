@@ -1,6 +1,12 @@
 import { createCity, getCities, getCity, getCityMembers } from "./routes/city";
 import { checkAuth, createUser, login } from "./routes/auth";
 import { getMe, updateRole } from "./routes/users";
+import {
+  createIssue,
+  getIssue,
+  getAllIssuesFromCity,
+  updateIssueAssignees,
+} from "./routes/issue";
 
 export const createApiClient = () => {
   const auth = { checkAuth, createUser, login };
@@ -9,10 +15,18 @@ export const createApiClient = () => {
 
   const city = { createCity, getCities, getCity, getCityMembers };
 
+  const issue = {
+    createIssue,
+    getIssue,
+    getAllIssuesFromCity,
+    updateIssueAssignees,
+  };
+
   return {
     ...auth,
     ...users,
     ...city,
+    ...issue,
   };
 };
 

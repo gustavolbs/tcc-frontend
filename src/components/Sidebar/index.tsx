@@ -21,6 +21,7 @@ export const Sidebar: React.FC = () => {
         <hr />
         Cidade
         <Link to="/city/members">Gestores</Link>
+        <Link to="/issue/create">Registrar problema</Link>
         <hr />
         {isAdmin && (
           <>
