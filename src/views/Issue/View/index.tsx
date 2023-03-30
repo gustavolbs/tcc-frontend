@@ -6,6 +6,7 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet";
 
 import { api } from "../../../api/client";
 import { notify } from "../../../helpers/notify";
+import { formatDate } from "../../../helpers/date";
 import { AVAILABLE_CATEGORIES } from "../../../helpers/issue-categories";
 
 import { useUser } from "../../../contexts/UserContext";
@@ -44,8 +45,12 @@ export const ViewIssue: React.FC = () => {
           Problema - # {issue?.id} ({issue?.status})
         </h2>
 
-        <span>Registrado em {issue?.createdAt}</span>
-        <span>Atualizado em {issue?.updatedAt}</span>
+        <span>
+          Registrado em {issue?.createdAt && formatDate(issue?.createdAt)}
+        </span>
+        <span>
+          Atualizado em {issue?.updatedAt && formatDate(issue?.updatedAt)}
+        </span>
 
         <form className="auth-form">
           <div className="grid-row issue-view-grid">
