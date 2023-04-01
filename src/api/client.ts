@@ -5,6 +5,7 @@ import {
   createIssue,
   getIssue,
   getAllIssuesFromCity,
+  getAllMyIssues,
   updateIssueAssignees,
 } from "./routes/issue";
 
@@ -19,6 +20,7 @@ export const createApiClient = () => {
     createIssue,
     getIssue,
     getAllIssuesFromCity,
+    getAllMyIssues,
     updateIssueAssignees,
   };
 

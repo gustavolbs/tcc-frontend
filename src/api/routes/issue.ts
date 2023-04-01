@@ -15,6 +15,9 @@ export const getIssue = (issueId: number) =>
 export const getAllIssuesFromCity = (cityId: number) =>
   useFetch<Issue[]>(cityId ? `/issue/all/${cityId}` : null);
 
+export const getAllMyIssues = (cityId: number) =>
+  useFetch<Issue[]>(cityId ? `/issue/all/${cityId}/mine` : null);
+
 export const updateIssueAssignees = (
   issueId: string,
   field: string,

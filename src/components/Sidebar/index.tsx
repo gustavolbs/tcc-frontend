@@ -18,10 +18,11 @@ export const Sidebar: React.FC = () => {
     <div className="app-container">
       <div className="navbar-container">
         <Link to="/">Dashboard</Link>
+        <Link to="/issues/mine">Minhas solicitações</Link>
         <hr />
         Cidade
         <Link to="/city/members">Gestores</Link>
-        <Link to="/issue/create">Registrar problema</Link>
+        <Link to="/issues/create">Registrar problema</Link>
         <hr />
         {isAdmin && (
           <>

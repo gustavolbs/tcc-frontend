@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AppRoutes } from "./routes";
 import L from "leaflet";
+import { SkeletonTheme } from "react-loading-skeleton";
 import { Toaster } from "react-hot-toast";
 
 import { UserProvider } from "./contexts/UserContext";
@@ -8,6 +9,7 @@ import { CityProvider } from "./contexts/CityContext";
 
 import "./index.scss";
 import "leaflet/dist/leaflet.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import iconUrl from "./assets/marker-icon.png";
 import shadowUrl from "./assets/marker-shadow.png";
@@ -37,11 +39,21 @@ export const App: React.FC = () => {
   };
 
   return (
-    <UserProvider isTokenValid={isTokenValid} setIsTokenValid={setIsTokenValid}>
-      <CityProvider>
-        <Toaster />
-        <AppRoutes isAuthenticated={isTokenValid} onLogin={handleLogin} />
-      </CityProvider>
-    </UserProvider>
+    <SkeletonTheme
+      baseColor="#5294e0"
+      highlightColor="#96c7ff"
+      borderRadius="0.5rem"
+      duration={3}
+    >
+      <UserProvider
+        isTokenValid={isTokenValid}
+        setIsTokenValid={setIsTokenValid}
+      >
+        <CityProvider>
+          <Toaster />
+          <AppRoutes isAuthenticated={isTokenValid} onLogin={handleLogin} />
+        </CityProvider>
+      </UserProvider>
+    </SkeletonTheme>
   );
 };
