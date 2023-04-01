@@ -37,7 +37,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <UserProvider isTokenValid={isTokenValid}>
+    <UserProvider isTokenValid={isTokenValid} setIsTokenValid={setIsTokenValid}>
       <CityProvider>
         <Toaster />
         <AppRoutes isAuthenticated={isTokenValid} onLogin={handleLogin} />

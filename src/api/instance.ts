@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import type { SWRConfiguration } from "swr";
 import axios, { AxiosInstance } from "axios";
 import { notify } from "../helpers/notify";
 
@@ -37,8 +38,8 @@ export const createAxiosInstance = () => {
 
 const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
 
-export const useFetch = <T>(url: string | null) => {
-  const { data, error } = useSWR<T>(url, fetcher);
+export const useFetch = <T>(url: string | null, options?: SWRConfiguration) => {
+  const { data, error } = useSWR<T>(url, fetcher, options);
   return {
     data: data,
     isLoading: !error && !data,
