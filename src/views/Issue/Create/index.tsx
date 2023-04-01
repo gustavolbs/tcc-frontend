@@ -23,7 +23,11 @@ import "./index.scss";
 
 export const RegisterIssue: React.FC = () => {
   const { user } = useUser();
-  const { city } = useCity();
+  const { city, isLoading } = useCity();
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
 
   const INITIAL_POSITION = [
     city?.latitude,
