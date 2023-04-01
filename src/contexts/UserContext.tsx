@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { mutate } from "swr";
 
 import { api } from "../api/client";
 
@@ -24,6 +25,7 @@ export const useUser = () => useContext(UserContext);
 
 interface UserProviderProps extends React.PropsWithChildren {
   isTokenValid: boolean;
+  setIsTokenValid: (value: boolean) => void;
 }
 
 export const checkAuthenticated = (isTokenValid: boolean) => {
@@ -33,6 +35,7 @@ export const checkAuthenticated = (isTokenValid: boolean) => {
 
 export const UserProvider: React.FC<UserProviderProps> = ({
   isTokenValid,
+  setIsTokenValid,
   children,
 }) => {
   const {
@@ -46,6 +49,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({
   const logout = () => {
     localStorage.removeItem("myapp-token");
     setCurrentUser(null);
+    setIsTokenValid(false);
+    mutate("/users/me", null); // invalida o cache do hook SWR
   };
 
   useEffect(() => {
@@ -54,8 +59,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     }
   }, [user]);
 
-  const isAdmin = user?.role === "admin";
-  const isOwner = user?.role === "owner";
+  const isAdmin = currentUser?.role === "admin";
+  const isOwner = currentUser?.role === "owner";
 
   if (isCheckError) {
     logout();
