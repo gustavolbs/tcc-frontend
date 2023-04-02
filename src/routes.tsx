@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { useUser } from "./contexts/UserContext";
 
@@ -11,6 +11,7 @@ import { CityMembers } from "./views/City/Members";
 import { CreateCity } from "./views/City/Create";
 import { HomePage } from "./views/HomePage";
 import { LoginForm } from "./views/LoginForm";
+import { MyRquests } from "./views/MyRquests";
 import { RegisterForm } from "./views/RegisterForm";
 import { RegisterIssue } from "./views/Issue/Create";
 import { ViewIssue } from "./views/Issue/View";
@@ -47,6 +48,14 @@ export const AppRoutes: React.FC<RoutesProps> = ({
             }
           />
           <Route
+            path="/issues/mine"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <MyRquests />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/city/members"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
@@ -55,7 +64,7 @@ export const AppRoutes: React.FC<RoutesProps> = ({
             }
           />
           <Route
-            path="/issue/create"
+            path="/issues/create"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <RegisterIssue />
@@ -63,7 +72,7 @@ export const AppRoutes: React.FC<RoutesProps> = ({
             }
           />
           <Route
-            path="/issue/:issueId"
+            path="/issues/:issueId"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <ViewIssue />

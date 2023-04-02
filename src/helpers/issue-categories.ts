@@ -42,3 +42,7 @@ export const AVAILABLE_CATEGORIES: Category[] = [
       "O trecho X na rua Y ainda não foi (calçado/asfaltado) e um ponto de referência é Z",
   },
 ];
+
+export const findCategoryName = (name: string): string | undefined => {
+  return AVAILABLE_CATEGORIES.find((c) => c.value === name)?.name;
+};

@@ -6,6 +6,7 @@ import { notify } from "../../../helpers/notify";
 
 import { LabelLayout } from "../../../components/LabelLayout";
 import { SelectLayout } from "../../../components/SelectLayout";
+import { SkeletonTableRow } from "../../../components/Skeletons/TableRow";
 
 import { useUser } from "../../../contexts/UserContext";
 
@@ -16,7 +17,7 @@ import emailSVG from "../../../assets/email.svg";
 import "./index.scss";
 
 export const CityMembers: React.FC = () => {
-  const { user, isAdmin, isOwner } = useUser();
+  const { user, isAdmin } = useUser();
   const [search, setSearch] = useState("");
 
   const {
@@ -51,61 +52,101 @@ export const CityMembers: React.FC = () => {
           cidade.
         </span>
 
-        <LabelLayout htmlFor="email">
-          <ReactSVG src={emailSVG} />
-          <input
-            type="text"
-            id="email"
-            placeholder="Procure pelo email"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </LabelLayout>
+        {members?.length && !isLoading && (
+          <LabelLayout htmlFor="email">
+            <ReactSVG src={emailSVG} />
+            <input
+              type="text"
+              id="email"
+              placeholder="Procure pelo email"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </LabelLayout>
+        )}
 
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>id</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Cargo</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {members
-                ?.filter((person) => person.email.includes(search))
-                .map((member) => (
-                  <tr key={member.id}>
-                    <td>{member.id}</td>
-                    <td>
-                      {member.name} {member.surname}
-                    </td>
-                    <td>{member.email}</td>
-                    <td>
-                      {(isAdmin || (isOwner && member.role !== "admin")) &&
-                      user?.id !== member.id ? (
-                        <SelectLayout
-                          onChange={(e) => handleChangeRole(e, member)}
-                          defaultValue={member.role}
-                        >
-                          {availableRoles.map((role) => (
-                            <option key={role} value={role}>
-                              {role}
-                            </option>
-                          ))}
-                        </SelectLayout>
-                      ) : (
-                        member.role
-                      )}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+        <MembersTable
+          availableRoles={availableRoles}
+          handleChangeRole={handleChangeRole}
+          isLoading={isLoading}
+          members={members}
+          search={search}
+        />
       </div>
+    </div>
+  );
+};
+
+interface MembersTableProps {
+  availableRoles: string[];
+  handleChangeRole: (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    member: User
+  ) => void;
+  isLoading: boolean;
+  members: User[] | undefined;
+  search: string;
+}
+
+const MembersTable: React.FC<MembersTableProps> = ({
+  availableRoles,
+  handleChangeRole,
+  isLoading,
+  members,
+  search,
+}) => {
+  const { user, isAdmin, isOwner } = useUser();
+
+  const headerKeys = ["id", "Nome", "Email", "Cargo"];
+
+  return (
+    <div className="table-container">
+      {!members?.length && !isLoading && <div>Nenhum resultado encontrado</div>}
+
+      <table>
+        <thead>
+          <tr>
+            {headerKeys.map((key) => (
+              <td id={`membersHeader#${key}`}>{key}</td>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {isLoading ? (
+            <SkeletonTableRow columns={headerKeys} />
+          ) : (
+            members
+              ?.filter((person) => person.email.includes(search))
+              .map((member) => (
+                <tr key={member.id}>
+                  <td>{member.id}</td>
+                  <td>
+                    {member.name} {member.surname}
+                  </td>
+                  <td>{member.email}</td>
+                  <td>
+                    {(isAdmin || (isOwner && member.role !== "admin")) &&
+                    user?.id !== member.id ? (
+                      <SelectLayout
+                        onChange={(e) => handleChangeRole(e, member)}
+                        defaultValue={member.role}
+                      >
+                        {availableRoles.map((role) => (
+                          <option key={role} value={role}>
+                            {role}
+                          </option>
+                        ))}
+                      </SelectLayout>
+                    ) : (
+                      member.role
+                    )}
+                  </td>
+                </tr>
+              ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

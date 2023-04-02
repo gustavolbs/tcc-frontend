@@ -9,19 +9,17 @@ import { useUser } from "../../contexts/UserContext";
 
 import "./index.scss";
 
-export const HomePage: React.FC = () => {
+export const MyRquests: React.FC = () => {
   const { user } = useUser();
   const { city } = useCity();
 
-  const { data: issues, isLoading } = api.getAllIssuesFromCity(
-    Number(user?.city)
-  );
+  const { data: issues, isLoading } = api.getAllMyIssues(Number(user?.city));
 
   return (
     <div className="dashboard-container">
       <div className="box-manage-members">
         <h2>{city?.name}</h2>
-        <span>Acompanhe aqui todas as solicitações feitas em sua cidade.</span>
+        <span>Acompanhe aqui todas as suas solicitações feitas.</span>
 
         <IssuesTable issues={issues} isLoading={isLoading} />
       </div>
