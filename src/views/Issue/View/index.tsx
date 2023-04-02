@@ -96,7 +96,7 @@ export const ViewIssue: React.FC = () => {
                         - Mostra msg de não tem, se n tiver
                 
                 */}
-              {!isResident ? (
+              {!isResident || issue?.reporterId === user?.id ? (
                 <LabelLayout>
                   <ReactSVG src={keySVG} />
                   <div>
@@ -139,7 +139,7 @@ export const ViewIssue: React.FC = () => {
                         - Mostra o nome do usuário
                 
                 */}
-              {isResident ? (
+              {isResident || issue?.reporterId === user?.id ? (
                 <LabelLayout>
                   <ReactSVG src={keySVG} />
                   <div>
