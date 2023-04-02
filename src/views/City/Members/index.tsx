@@ -107,7 +107,7 @@ const MembersTable: React.FC<MembersTableProps> = ({
         <thead>
           <tr>
             {headerKeys.map((key) => (
-              <td id={`membersHeader#${key}`}>{key}</td>
+              <td key={`membersHeader#${key}`}>{key}</td>
             ))}
           </tr>
         </thead>

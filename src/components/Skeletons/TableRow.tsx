@@ -16,7 +16,7 @@ export const SkeletonTableRow: React.FC<SkeletonTableRowProps> = ({
         .map((row, index) => (
           <tr key={`skeletonRow#${index}`}>
             {columns.map((key) => (
-              <td id={key}>
+              <td key={key}>
                 <Skeleton />
               </td>
             ))}
