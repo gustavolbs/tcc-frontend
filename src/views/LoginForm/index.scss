@@ -95,6 +95,10 @@
 }
 
 @media only screen and (max-width: 500px) {
+  .container {
+    justify-content: flex-start;
+  }
+
   .box {
     max-width: 95vw;
     padding: 36px 16px;

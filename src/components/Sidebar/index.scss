@@ -34,8 +34,11 @@
   &:hover {
     max-width: 150px;
     width: 100%;
-    transition: all ease 200ms;
   }
+}
+
+.menu-button {
+  display: none;
 }
 
 @media only screen and (max-width: 500px) {
@@ -44,25 +47,65 @@
   }
 
   .app-container {
-    position: relative;
+    flex-direction: column;
   }
 
   .navbar-container {
-    position: absolute;
-    max-width: 50px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    max-width: unset;
     padding: 16px;
     margin-right: 0;
+    margin-top: 0;
+    border-radius: 0 0 14px 14px;
+    height: 60px;
 
     &:hover {
-      max-width: 120px;
+      max-width: unset;
     }
+  }
+
+  .navbar-container.open {
+    height: 273px;
+    max-width: unset;
   }
 
   .content {
     margin-left: 0;
+    padding: 0;
   }
 
   .navbar-container:hover + .content {
     margin-left: 0;
+  }
+
+  .menu-button {
+    display: inline-block;
+    cursor: pointer;
+    margin-left: auto;
+    padding-bottom: 16px;
+  }
+
+  .bar1,
+  .bar2,
+  .bar3 {
+    width: 35px;
+    height: 5px;
+    background-color: #333;
+    margin: 4px 0;
+    transition: 0.4s;
+  }
+
+  .open .bar1 {
+    transform: translate(0, 7px) rotate(-45deg);
+  }
+
+  .open .bar2 {
+    opacity: 0;
+  }
+
+  .open .bar3 {
+    transform: translate(0, -11px) rotate(45deg);
   }
 }

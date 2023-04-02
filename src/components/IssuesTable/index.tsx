@@ -36,7 +36,7 @@ export const IssuesTable: React.FC<IssuesTableProps> = ({
         <thead>
           <tr>
             {TABLE_KEYS.map((key) => (
-              <td id={`issuesHeader#${key}`}>{key}</td>
+              <td key={`issuesHeader#${key}`}>{key}</td>
             ))}
           </tr>
         </thead>
