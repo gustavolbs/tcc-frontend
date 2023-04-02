@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AppRoutes } from "./routes";
+import { AppRoutes } from "./routes/router";
 import L from "leaflet";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { Toaster } from "react-hot-toast";

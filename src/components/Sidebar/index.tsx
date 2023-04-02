@@ -1,18 +1,26 @@
 import React, { useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { AiOutlineLogout } from "react-icons/ai";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useUser } from "../../contexts/UserContext";
+
+import { ROUTES } from "../../routes/routes";
 
 import "./index.scss";
 
 export const Sidebar: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAdmin, logout } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const isRouteActive = (routePath: string) => {
+    return location.pathname === routePath ? "sidebar-link-active" : "";
   };
 
   return (
@@ -26,21 +34,28 @@ export const Sidebar: React.FC = () => {
           <div className="bar2" />
           <div className="bar3" />
         </div>
-        <Link to="/">Dashboard</Link>
-        <Link to="/issues/mine">Minhas solicitações</Link>
-        <hr />
-        Cidade
-        <Link to="/city/members">Gestores</Link>
-        <Link to="/issues/create">Registrar problema</Link>
-        <hr />
-        {isAdmin && (
-          <>
-            Admin
-            <Link to="/city/create">Criar Cidade</Link>
-            <hr />
-          </>
-        )}
-        <span onClick={handleLogout}>Sair</span>
+
+        <div className="routes">
+          {ROUTES.map((route) => {
+            if (route.isAdmin && !isAdmin) return null;
+
+            return (
+              route.shouldShowOnSidebar && (
+                <Link
+                  key={route.path}
+                  to={route.path}
+                  className={`sidebar-link ${isRouteActive(route.path)}`}
+                >
+                  {route.icon} {route.title}
+                </Link>
+              )
+            );
+          })}
+        </div>
+        <span className="sidebar-link logout" onClick={handleLogout}>
+          <AiOutlineLogout />
+          Sair
+        </span>
       </div>
       <div className="content">
         <Outlet />
