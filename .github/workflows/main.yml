@@ -2,7 +2,7 @@ name: s3 deployment
 
 on:
   push:
-    branches: [develop] # the branch we want this to run on
+    branches: [main] # the branch we want this to run on
 
 jobs:
   build:
@@ -28,13 +28,13 @@ jobs:
         run: npm i
 
       - name: build
-        run: STAGE=dev npm run build
+        run: STAGE=production npm run build
 
       - name: copy files to s3
-        run: aws s3 sync ./dist s3://${{ secrets.S3_DEV_BUCKET }}
+        run: aws s3 sync ./dist s3://${{ secrets.S3_PRD_BUCKET }}
 
       - name: Invalidate cache
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.AWS_DEV_CDN }} \
+            --distribution-id ${{ secrets.AWS_PRD_CDN }} \
             --paths "/*"
