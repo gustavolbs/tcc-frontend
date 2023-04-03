@@ -26,8 +26,6 @@ jobs:
 
       - name: npm install
         run: npm i
-        env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: build
         run: STAGE=dev npm run build
