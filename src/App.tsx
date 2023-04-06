@@ -39,18 +39,18 @@ export const App: React.FC = () => {
   };
 
   return (
-    <SkeletonTheme
-      baseColor="#5294e0"
-      highlightColor="#96c7ff"
-      borderRadius="0.5rem"
-      duration={3}
-    >
+    <SkeletonTheme borderRadius="0.5rem" duration={3}>
       <UserProvider
         isTokenValid={isTokenValid}
         setIsTokenValid={setIsTokenValid}
       >
         <CityProvider>
-          <Toaster />
+          <Toaster
+            containerStyle={{
+              top: window.innerWidth <= 500 ? 70 : 20,
+              zIndex: 99999,
+            }}
+          />
           <AppRoutes isAuthenticated={isTokenValid} onLogin={handleLogin} />
         </CityProvider>
       </UserProvider>

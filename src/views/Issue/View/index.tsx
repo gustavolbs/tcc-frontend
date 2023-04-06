@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { ReactSVG } from "react-svg";
 import { LatLngExpression } from "leaflet";
 import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import Skeleton from "react-loading-skeleton";
 
 import { api } from "../../../api/client";
 import { notify } from "../../../helpers/notify";
@@ -21,13 +22,17 @@ import "./index.scss";
 export const ViewIssue: React.FC = () => {
   const { issueId } = useParams();
   const { user } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
   const isResident = user?.role === "resident";
 
-  const { data: issue, isError, isLoading } = api.getIssue(Number(issueId));
+  const { data: issue, isLoading: isLoadingIssue } = api.getIssue(
+    Number(issueId)
+  );
 
   const handleAssignMe = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     const field = (e.target as any)?.name as string;
 
     try {
@@ -35,6 +40,8 @@ export const ViewIssue: React.FC = () => {
       notify("success", `Cargo atualizado com sucesso!`);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -42,45 +49,72 @@ export const ViewIssue: React.FC = () => {
     <div className="container">
       <div className="box-create-city box-create-issue">
         <h2>
-          Problema - # {issue?.id} ({issue?.status})
+          Problema - #{" "}
+          {isLoadingIssue ? (
+            <Skeleton width={160} />
+          ) : (
+            `${issue?.id} (${issue?.status})`
+          )}
         </h2>
 
         <span>
-          Registrado em {issue?.createdAt && formatDate(issue?.createdAt)}
+          Registrado em{" "}
+          {isLoadingIssue ? (
+            <Skeleton width={200} />
+          ) : (
+            issue?.createdAt && formatDate(issue?.createdAt)
+          )}
         </span>
         <span>
-          Atualizado em {issue?.updatedAt && formatDate(issue?.updatedAt)}
+          Atualizado em{" "}
+          {isLoadingIssue ? (
+            <Skeleton width={200} />
+          ) : (
+            issue?.updatedAt && formatDate(issue?.updatedAt)
+          )}
         </span>
 
         <form className="auth-form">
           <div className="grid-row issue-view-grid">
             <div>
               <span>Tipo</span>
-              <LabelLayout>
-                <div>
-                  {
-                    AVAILABLE_CATEGORIES.find(
-                      (c) => c.value === issue?.category
-                    )?.name
-                  }
-                </div>
-              </LabelLayout>
+              {isLoadingIssue ? (
+                <Skeleton height={60} />
+              ) : (
+                <LabelLayout>
+                  <div>
+                    {
+                      AVAILABLE_CATEGORIES.find(
+                        (c) => c.value === issue?.category
+                      )?.name
+                    }
+                  </div>
+                </LabelLayout>
+              )}
 
               <span>Descrição</span>
-              <LabelLayout>
-                <ReactSVG src={keySVG} />
-                <div>{issue?.description}</div>
-              </LabelLayout>
+              {isLoadingIssue ? (
+                <Skeleton height={60} />
+              ) : (
+                <LabelLayout>
+                  <ReactSVG src={keySVG} />
+                  <div>{issue?.description}</div>
+                </LabelLayout>
+              )}
             </div>
 
             <div>
               <span>Relator</span>
-              <LabelLayout>
-                <ReactSVG src={keySVG} />
-                <div>
-                  {issue?.reporter?.name} {issue?.reporter?.surname}
-                </div>
-              </LabelLayout>
+              {isLoadingIssue ? (
+                <Skeleton height={60} />
+              ) : (
+                <LabelLayout>
+                  <ReactSVG src={keySVG} />
+                  <div>
+                    {issue?.reporter?.name} {issue?.reporter?.surname}
+                  </div>
+                </LabelLayout>
+              )}
 
               <span>Fiscal</span>
               {/* 
@@ -96,7 +130,9 @@ export const ViewIssue: React.FC = () => {
                         - Mostra msg de não tem, se n tiver
                 
                 */}
-              {!isResident || issue?.reporterId === user?.id ? (
+              {isLoadingIssue ? (
+                <Skeleton height={60} />
+              ) : !isResident || issue?.reporterId === user?.id ? (
                 <LabelLayout>
                   <ReactSVG src={keySVG} />
                   <div>
@@ -107,13 +143,23 @@ export const ViewIssue: React.FC = () => {
                 </LabelLayout>
               ) : !issue?.fiscal ? (
                 <div>
-                  <ButtonLayout name="fiscalId" onClick={handleAssignMe}>
+                  <ButtonLayout
+                    name="fiscalId"
+                    onClick={handleAssignMe}
+                    disabled={isLoading}
+                    isLoading={isLoading}
+                  >
                     Me atribuir
                   </ButtonLayout>
                 </div>
               ) : issue?.fiscal.id === user?.id ? (
                 <div>
-                  <ButtonLayout name="fiscalId" onClick={handleAssignMe}>
+                  <ButtonLayout
+                    name="fiscalId"
+                    onClick={handleAssignMe}
+                    disabled={isLoading}
+                    isLoading={isLoading}
+                  >
                     Me desatribuir
                   </ButtonLayout>
                 </div>
@@ -139,7 +185,9 @@ export const ViewIssue: React.FC = () => {
                         - Mostra o nome do usuário
                 
                 */}
-              {isResident || issue?.reporterId === user?.id ? (
+              {isLoadingIssue ? (
+                <Skeleton height={60} />
+              ) : isResident || issue?.reporterId === user?.id ? (
                 <LabelLayout>
                   <ReactSVG src={keySVG} />
                   <div>
@@ -150,13 +198,23 @@ export const ViewIssue: React.FC = () => {
                 </LabelLayout>
               ) : !issue?.manager ? (
                 <div>
-                  <ButtonLayout name="managerId" onClick={handleAssignMe}>
+                  <ButtonLayout
+                    name="managerId"
+                    onClick={handleAssignMe}
+                    disabled={isLoading}
+                    isLoading={isLoading}
+                  >
                     Me atribuir
                   </ButtonLayout>
                 </div>
               ) : issue?.manager.id === user?.id ? (
                 <div>
-                  <ButtonLayout name="managerId" onClick={handleAssignMe}>
+                  <ButtonLayout
+                    name="managerId"
+                    onClick={handleAssignMe}
+                    disabled={isLoading}
+                    isLoading={isLoading}
+                  >
                     Me desatribuir
                   </ButtonLayout>
                 </div>
@@ -172,6 +230,7 @@ export const ViewIssue: React.FC = () => {
           </div>
 
           <div className="map-container">
+            {isLoadingIssue && <Skeleton height={400} />}{" "}
             {issue?.latitude && (
               <MapContainer
                 center={[issue?.latitude, issue?.longitude] as LatLngExpression}

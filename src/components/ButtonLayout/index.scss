@@ -11,6 +11,9 @@ button {
   line-height: 22px;
   /* identical to box height */
 
+  display: flex;
+  justify-content: center;
+
   text-align: center;
   letter-spacing: 0.1px;
 

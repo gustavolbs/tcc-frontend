@@ -8,7 +8,7 @@ import {
 
 import { CityMembers } from "../views/City/Members";
 import { CreateCity } from "../views/City/Create";
-import { HomePage } from "../views/HomePage";
+import { Dashboard } from "../views/Dashboard";
 import { MyRquests } from "../views/MyRquests";
 import { RegisterIssue } from "../views/Issue/Create";
 import { ViewIssue } from "../views/Issue/View";
@@ -26,10 +26,10 @@ interface RouteConfig {
 export const ROUTES: RouteConfig[] = [
   {
     icon: <AiOutlineHome />,
-    path: "/",
+    path: "/dashboard",
     isPrivate: true,
     isAdmin: false,
-    component: <HomePage />,
+    component: <Dashboard />,
     shouldShowOnSidebar: true,
     title: "Dashboard",
   },

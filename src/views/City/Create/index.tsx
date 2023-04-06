@@ -17,6 +17,7 @@ import "./index.scss";
 export const CreateCity: React.FC = () => {
   const [position, setPosition] = useState<LatLngExpression>(BRAZIL_POSITION);
   const [cityName, setCityName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function SetViewOnClick() {
     const map = useMapEvents({
@@ -37,6 +38,7 @@ export const CreateCity: React.FC = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       await api.createCity({
@@ -50,6 +52,8 @@ export const CreateCity: React.FC = () => {
       setPosition(BRAZIL_POSITION);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,7 +84,13 @@ export const CreateCity: React.FC = () => {
             </MapContainer>
           </div>
 
-          <ButtonLayout type="submit">Adicionar Cidade</ButtonLayout>
+          <ButtonLayout
+            type="submit"
+            disabled={isLoading}
+            isLoading={isLoading}
+          >
+            Adicionar Cidade
+          </ButtonLayout>
         </form>
       </div>
     </div>

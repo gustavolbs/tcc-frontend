@@ -1,4 +1,5 @@
 import React from "react";
+import Skeleton from "react-loading-skeleton";
 
 import { IssuesTable } from "../../components/IssuesTable";
 
@@ -9,9 +10,9 @@ import { useUser } from "../../contexts/UserContext";
 
 import "./index.scss";
 
-export const HomePage: React.FC = () => {
+export const Dashboard: React.FC = () => {
   const { user } = useUser();
-  const { city } = useCity();
+  const { city, isLoading: isLoadingCity } = useCity();
 
   const { data: issues, isLoading } = api.getAllIssuesFromCity(
     Number(user?.city)
@@ -20,7 +21,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="dashboard-container">
       <div className="box-manage-members">
-        <h2>{city?.name}</h2>
+        <h2>{isLoadingCity ? <Skeleton height={40} /> : city?.name}</h2>
         <span>Acompanhe aqui todas as solicitações feitas em sua cidade.</span>
 
         <IssuesTable issues={issues} isLoading={isLoading} />

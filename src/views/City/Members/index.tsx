@@ -20,11 +20,9 @@ export const CityMembers: React.FC = () => {
   const { user, isAdmin } = useUser();
   const [search, setSearch] = useState("");
 
-  const {
-    data: members,
-    isError,
-    isLoading,
-  } = api.getCityMembers(Number(user?.city));
+  const { data: members, isLoading: isLoadingMembers } = api.getCityMembers(
+    Number(user?.city)
+  );
 
   const availableRoles = ["resident", "manager", "owner"];
 
@@ -32,13 +30,17 @@ export const CityMembers: React.FC = () => {
 
   const handleChangeRole = async (
     event: React.ChangeEvent<HTMLSelectElement>,
-    member: User
+    member: User,
+    setUpdating: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     try {
+      setUpdating(true);
       await api.updateRole(member.email, event.target.value);
       notify("success", `Cargo atualizado com sucesso!`);
     } catch (error) {
       console.error(error);
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -52,7 +54,7 @@ export const CityMembers: React.FC = () => {
           cidade.
         </span>
 
-        {members?.length && !isLoading && (
+        {members?.length && !isLoadingMembers && (
           <LabelLayout htmlFor="email">
             <ReactSVG src={emailSVG} />
             <input
@@ -68,7 +70,7 @@ export const CityMembers: React.FC = () => {
         <MembersTable
           availableRoles={availableRoles}
           handleChangeRole={handleChangeRole}
-          isLoading={isLoading}
+          isLoadingMembers={isLoadingMembers}
           members={members}
           search={search}
         />
@@ -81,9 +83,10 @@ interface MembersTableProps {
   availableRoles: string[];
   handleChangeRole: (
     event: React.ChangeEvent<HTMLSelectElement>,
-    member: User
+    member: User,
+    setUpdating: React.Dispatch<React.SetStateAction<boolean>>
   ) => void;
-  isLoading: boolean;
+  isLoadingMembers: boolean;
   members: User[] | undefined;
   search: string;
 }
@@ -91,17 +94,20 @@ interface MembersTableProps {
 const MembersTable: React.FC<MembersTableProps> = ({
   availableRoles,
   handleChangeRole,
-  isLoading,
+  isLoadingMembers,
   members,
   search,
 }) => {
   const { user, isAdmin, isOwner } = useUser();
+  const [isUpdating, setUpdating] = useState(false);
 
   const headerKeys = ["id", "Nome", "Email", "Cargo"];
 
   return (
     <div className="table-container">
-      {!members?.length && !isLoading && <div>Nenhum resultado encontrado</div>}
+      {!members?.length && !isLoadingMembers && (
+        <div>Nenhum resultado encontrado</div>
+      )}
 
       <table>
         <thead>
@@ -113,7 +119,7 @@ const MembersTable: React.FC<MembersTableProps> = ({
         </thead>
 
         <tbody>
-          {isLoading ? (
+          {isLoadingMembers ? (
             <SkeletonTableRow columns={headerKeys} />
           ) : (
             members
@@ -129,8 +135,11 @@ const MembersTable: React.FC<MembersTableProps> = ({
                     {(isAdmin || (isOwner && member.role !== "admin")) &&
                     user?.id !== member.id ? (
                       <SelectLayout
-                        onChange={(e) => handleChangeRole(e, member)}
+                        onChange={(e) =>
+                          handleChangeRole(e, member, setUpdating)
+                        }
                         defaultValue={member.role}
+                        disabled={isUpdating}
                       >
                         {availableRoles.map((role) => (
                           <option key={role} value={role}>
