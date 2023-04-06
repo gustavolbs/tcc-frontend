@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LatLngExpression } from "leaflet";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { ReactSVG } from "react-svg";
+import Skeleton from "react-loading-skeleton";
 
 import { api } from "../../../api/client";
 import { notify } from "../../../helpers/notify";
@@ -23,20 +24,22 @@ import "./index.scss";
 
 export const RegisterIssue: React.FC = () => {
   const { user } = useUser();
-  const { city, isLoading } = useCity();
-
-  if (isLoading) {
-    return <div>Carregando...</div>;
-  }
+  const { city, isLoading: isLoadingCity } = useCity();
+  const [isLoading, setIsLoading] = useState(false);
+  const [category, setCategory] = useState<Category>(AVAILABLE_CATEGORIES[0]);
+  const [description, setDescription] = useState<string>("");
+  const [position, setPosition] = useState<LatLngExpression | undefined>();
 
   const INITIAL_POSITION = [
     city?.latitude,
     city?.longitude,
   ] as LatLngExpression;
 
-  const [category, setCategory] = useState<Category>(AVAILABLE_CATEGORIES[0]);
-  const [description, setDescription] = useState<string>("");
-  const [position, setPosition] = useState<LatLngExpression>(INITIAL_POSITION);
+  useEffect(() => {
+    if (city?.latitude && city?.longitude) {
+      setPosition(INITIAL_POSITION);
+    }
+  }, [city]);
 
   function SetViewOnClick() {
     const map = useMapEvents({
@@ -66,6 +69,7 @@ export const RegisterIssue: React.FC = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       await api.createIssue({
@@ -85,6 +89,8 @@ export const RegisterIssue: React.FC = () => {
       setDescription("");
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -117,17 +123,26 @@ export const RegisterIssue: React.FC = () => {
           </div>
 
           <div className="map-container">
-            <MapContainer center={position} zoom={13} scrollWheelZoom>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {position && <Marker position={position} />}
-              <SetViewOnClick />
-            </MapContainer>
+            {isLoadingCity && <Skeleton height={400} />}
+            {position && (
+              <MapContainer center={position} zoom={13} scrollWheelZoom>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={position} />
+                <SetViewOnClick />
+              </MapContainer>
+            )}
           </div>
 
-          <ButtonLayout type="submit">Registrar</ButtonLayout>
+          <ButtonLayout
+            type="submit"
+            disabled={isLoading}
+            isLoading={isLoading}
+          >
+            Registrar
+          </ButtonLayout>
         </form>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { ReactSVG } from "react-svg";
@@ -33,19 +33,23 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  const { data: cities, isError, isLoading } = api.getCities();
+  const [isLoading, setIsLoading] = useState(false);
+  const { data: cities } = api.getCities();
   const navigate = useNavigate();
 
   const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
     try {
       const response = await api.createUser(data);
       const token = response.data.token;
 
       notify("success", "Usuário criado com sucesso!");
       onLogin(token);
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,82 +61,100 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
         <h2>Criar conta</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
           <div className="grid-row">
-            <LabelLayout htmlFor="name">
-              <ReactSVG src={emailSVG} />
-              <input
-                id="name"
-                type="text"
-                placeholder="Nome"
-                {...register("name", { required: true })}
-                className={`form-input${errors.name ? " has-error" : ""}`}
-              />
+            <div>
+              <LabelLayout htmlFor="name">
+                <ReactSVG src={emailSVG} />
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="Nome"
+                  {...register("name", { required: true })}
+                  className={`form-input${errors.name ? " has-error" : ""}`}
+                />
+              </LabelLayout>
               {errors.name && (
                 <span className="error-message">Este campo é obrigatório</span>
               )}
-            </LabelLayout>
-            <LabelLayout htmlFor="surname">
-              <ReactSVG src={emailSVG} />
-              <input
-                id="surname"
-                type="text"
-                placeholder="Sobrenome"
-                {...register("surname", { required: true })}
-                className={`form-input${errors.surname ? " has-error" : ""}`}
-              />
+            </div>
+
+            <div>
+              <LabelLayout htmlFor="surname">
+                <ReactSVG src={emailSVG} />
+                <input
+                  id="surname"
+                  type="text"
+                  placeholder="Sobrenome"
+                  {...register("surname", { required: true })}
+                  className={`form-input${errors.surname ? " has-error" : ""}`}
+                />
+              </LabelLayout>
               {errors.surname && (
                 <span className="error-message">Este campo é obrigatório</span>
               )}
-            </LabelLayout>
+            </div>
           </div>
 
-          <LabelLayout htmlFor="email">
-            <ReactSVG src={emailSVG} />
-            <input
-              id="email"
-              type="email"
-              placeholder="Email"
-              {...register("email", { required: true })}
-              className={`form-input${errors.email ? " has-error" : ""}`}
-            />
+          <div>
+            <LabelLayout htmlFor="email">
+              <ReactSVG src={emailSVG} />
+              <input
+                id="email"
+                type="email"
+                placeholder="Email"
+                {...register("email", { required: true })}
+                className={`form-input${errors.email ? " has-error" : ""}`}
+              />
+            </LabelLayout>
             {errors.email && (
               <span className="error-message">Este campo é obrigatório</span>
             )}
-          </LabelLayout>
+          </div>
 
-          <LabelLayout htmlFor="password">
-            <ReactSVG src={keySVG} />
-            <input
-              id="password"
-              type="password"
-              placeholder="Senha"
-              {...register("password", { required: true })}
-              className={`form-input${errors.password ? " has-error" : ""}`}
-            />
+          <div>
+            <LabelLayout htmlFor="password">
+              <ReactSVG src={keySVG} />
+              <input
+                id="password"
+                type="password"
+                placeholder="Senha"
+                {...register("password", { required: true })}
+                className={`form-input${errors.password ? " has-error" : ""}`}
+              />
+            </LabelLayout>
             {errors.password && (
               <span className="error-message">Este campo é obrigatório</span>
             )}
-          </LabelLayout>
+          </div>
 
-          <LabelLayout htmlFor="city">
-            <ReactSVG src={keySVG} />
-            <select
-              id="city"
-              {...register("city", { required: true })}
-              // onChange={handleCityChange}
-              className={`form-input${errors.city ? " has-error" : ""}`}
-            >
-              <option value="">Selecione uma cidade</option>
-              {cities?.map((city) => (
-                <option key={city.id} value={city.id}>
-                  {city.name}
-                </option>
-              ))}
-            </select>
+          <div>
+            <LabelLayout htmlFor="city">
+              <ReactSVG src={keySVG} />
+              <select
+                id="city"
+                {...register("city", { required: true })}
+                // onChange={handleCityChange}
+                className={`form-input${errors.city ? " has-error" : ""}`}
+              >
+                <option value="">Selecione uma cidade</option>
+                {cities?.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.name}
+                  </option>
+                ))}
+              </select>
+            </LabelLayout>
             {errors.city && (
               <span className="error-message">Este campo é obrigatório</span>
             )}
-          </LabelLayout>
-          <ButtonLayout type="submit">Confirmar</ButtonLayout>
+          </div>
+
+          <ButtonLayout
+            type="submit"
+            disabled={isLoading}
+            isLoading={isLoading}
+          >
+            Confirmar
+          </ButtonLayout>
           <Link className="recovery" to="/login">
             Já possui uma conta? Entrar
           </Link>

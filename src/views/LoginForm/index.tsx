@@ -28,6 +28,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -39,13 +40,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
+
     try {
       const { data } = await api.login(credentials);
       const token = data.token;
       onLogin(token);
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -78,7 +83,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               onChange={handleInputChange}
             />
           </LabelLayout>
-          <ButtonLayout type="submit">Login</ButtonLayout>
+          <ButtonLayout
+            type="submit"
+            disabled={isLoading}
+            isLoading={isLoading}
+          >
+            Login
+          </ButtonLayout>
           <a
             className="recovery"
             href="#"
