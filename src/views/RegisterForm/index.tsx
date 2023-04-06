@@ -9,8 +9,6 @@ import { notify } from "../../helpers/notify";
 import { LabelLayout } from "../../components/LabelLayout";
 import { ButtonLayout } from "../../components/ButtonLayout";
 
-import "./RegisterForm.scss";
-
 import emailSVG from "../../assets/email.svg";
 import keySVG from "../../assets/key.svg";
 import logoSVG from "../../assets/logo.svg";
@@ -54,13 +52,18 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="container">
-      <div className="box">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-600 px-4">
+      <div className="flex flex-col items-center bg-white shadow-lg rounded-lg px-4 md:px-12 lg:px-24  py-10 w-full max-w-screen-md">
         <ReactSVG src={logoSVG} />
-        <hr />
-        <h2>Criar conta</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
-          <div className="grid-row">
+        <hr className="w-full my-8 border border-gray-300" />
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
+          Criar conta
+        </h2>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full flex flex-col gap-4"
+        >
+          <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <LabelLayout htmlFor="name">
                 <ReactSVG src={emailSVG} />
@@ -69,11 +72,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                   type="text"
                   placeholder="Nome"
                   {...register("name", { required: true })}
-                  className={`form-input${errors.name ? " has-error" : ""}`}
+                  className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
+                    errors.name ? " has-error" : ""
+                  }`}
                 />
               </LabelLayout>
               {errors.name && (
-                <span className="error-message">Este campo é obrigatório</span>
+                <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+                  Este campo é obrigatório
+                </span>
               )}
             </div>
 
@@ -85,11 +92,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                   type="text"
                   placeholder="Sobrenome"
                   {...register("surname", { required: true })}
-                  className={`form-input${errors.surname ? " has-error" : ""}`}
+                  className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
+                    errors.surname ? " has-error" : ""
+                  }`}
                 />
               </LabelLayout>
               {errors.surname && (
-                <span className="error-message">Este campo é obrigatório</span>
+                <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+                  Este campo é obrigatório
+                </span>
               )}
             </div>
           </div>
@@ -102,11 +113,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                 type="email"
                 placeholder="Email"
                 {...register("email", { required: true })}
-                className={`form-input${errors.email ? " has-error" : ""}`}
+                className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
+                  errors.email ? " has-error" : ""
+                }`}
               />
             </LabelLayout>
             {errors.email && (
-              <span className="error-message">Este campo é obrigatório</span>
+              <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+                Este campo é obrigatório
+              </span>
             )}
           </div>
 
@@ -118,11 +133,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                 type="password"
                 placeholder="Senha"
                 {...register("password", { required: true })}
-                className={`form-input${errors.password ? " has-error" : ""}`}
+                className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
+                  errors.password ? " has-error" : ""
+                }`}
               />
             </LabelLayout>
             {errors.password && (
-              <span className="error-message">Este campo é obrigatório</span>
+              <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+                Este campo é obrigatório
+              </span>
             )}
           </div>
 
@@ -133,7 +152,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                 id="city"
                 {...register("city", { required: true })}
                 // onChange={handleCityChange}
-                className={`form-input${errors.city ? " has-error" : ""}`}
+                className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
+                  errors.city ? " has-error" : ""
+                }`}
               >
                 <option value="">Selecione uma cidade</option>
                 {cities?.map((city) => (
@@ -144,7 +165,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
               </select>
             </LabelLayout>
             {errors.city && (
-              <span className="error-message">Este campo é obrigatório</span>
+              <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+                Este campo é obrigatório
+              </span>
             )}
           </div>
 
@@ -152,10 +175,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
             type="submit"
             disabled={isLoading}
             isLoading={isLoading}
+            className="w-full"
           >
             Confirmar
           </ButtonLayout>
-          <Link className="recovery" to="/login">
+          <Link
+            className="block text-center font-semibold text-blue-600 hover:text-blue-800 mt-4"
+            to="/login"
+          >
             Já possui uma conta? Entrar
           </Link>
         </form>

@@ -7,7 +7,8 @@ import { Toaster } from "react-hot-toast";
 import { UserProvider } from "./contexts/UserContext";
 import { CityProvider } from "./contexts/CityContext";
 
-import "./index.scss";
+import "./index.css";
+import "./app.scss";
 import "leaflet/dist/leaflet.css";
 import "react-loading-skeleton/dist/skeleton.css";
 

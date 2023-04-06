@@ -7,7 +7,6 @@ import { formatDate } from "../../helpers/date";
 import { findCategoryName } from "../../helpers/issue-categories";
 import { findStatusName } from "../../helpers/status";
 
-import "./index.scss";
 import { SkeletonTableRow } from "../Skeletons/TableRow";
 
 interface IssuesTableProps {

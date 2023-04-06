@@ -11,8 +11,6 @@ import emailSVG from "../../assets/email.svg";
 import keySVG from "../../assets/key.svg";
 import logoSVG from "../../assets/logo.svg";
 
-import "./index.scss";
-
 interface LoginFormProps {
   onLogin: (token: string) => void;
 }
@@ -55,12 +53,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="container">
-      <div className="box">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-600 px-4">
+      <div className="flex flex-col items-center bg-white shadow-lg rounded-lg px-4 md:px-12 lg:px-24  py-10 w-full max-w-screen-md">
         <ReactSVG src={logoSVG} />
-        <hr />
-        <h2>Entrar</h2>
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <hr className="w-full my-8 border border-gray-300" />
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
+          Entrar
+        </h2>
+        <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
           <LabelLayout htmlFor="email">
             <ReactSVG src={emailSVG} />
             <input
@@ -70,6 +70,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               placeholder="Seu email"
               value={credentials.email}
               onChange={handleInputChange}
+              className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
             />
           </LabelLayout>
           <LabelLayout htmlFor="password">
@@ -81,17 +82,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               placeholder="Sua senha"
               value={credentials.password}
               onChange={handleInputChange}
+              className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
             />
           </LabelLayout>
           <ButtonLayout
             type="submit"
             disabled={isLoading}
             isLoading={isLoading}
+            className="w-full"
           >
             Login
           </ButtonLayout>
           <a
-            className="recovery"
+            className="block text-center font-semibold text-blue-600 hover:text-blue-800 mt-4 cursor-not-allowed opacity-50"
             href="#"
             target="_self"
             rel="noopener noreferrer"
@@ -100,7 +103,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           </a>
         </form>
       </div>
-      <Link className="register" to="/register">
+      <Link
+        className="text-white font-semibold mt-8 cursor-pointer hover:underline"
+        to="/register"
+      >
         Não possui uma conta? Criar uma conta
       </Link>
     </div>

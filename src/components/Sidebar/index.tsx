@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import { AiOutlineLogout } from "react-icons/ai";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useUser } from "../../contexts/UserContext";
 
 import { ROUTES } from "../../routes/routes";
 
-import "./index.scss";
+import {
+  AppContainer,
+  Content,
+  Logout,
+  SidebarContainer,
+  SidebarLink,
+} from "./styles";
+import { Menu as MenuButton } from "./MenuButton";
 
 export const Sidebar: React.FC = () => {
   const navigate = useNavigate();
@@ -20,20 +27,13 @@ export const Sidebar: React.FC = () => {
   };
 
   const isRouteActive = (routePath: string) => {
-    return location.pathname === routePath ? "sidebar-link-active" : "";
+    return location.pathname === routePath;
   };
 
   return (
-    <div className="app-container">
-      <div className={`navbar-container${isMenuOpen ? " open" : ""}`}>
-        <div
-          className={`menu-button${isMenuOpen ? " open" : ""}`}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <div className="bar1" />
-          <div className="bar2" />
-          <div className="bar3" />
-        </div>
+    <AppContainer>
+      <SidebarContainer isMenuOpen={isMenuOpen}>
+        <MenuButton isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
         <div className="routes">
           {ROUTES.map((route) => {
@@ -41,25 +41,27 @@ export const Sidebar: React.FC = () => {
 
             return (
               route.shouldShowOnSidebar && (
-                <Link
+                <SidebarLink
                   key={route.path}
                   to={route.path}
-                  className={`sidebar-link ${isRouteActive(route.path)}`}
+                  isRouteActive={isRouteActive(route.path)}
                 >
                   {route.icon} {route.title}
-                </Link>
+                </SidebarLink>
               )
             );
           })}
         </div>
-        <span className="sidebar-link logout" onClick={handleLogout}>
+
+        <Logout onClick={handleLogout}>
           <AiOutlineLogout />
           Sair
-        </span>
-      </div>
-      <div className="content">
+        </Logout>
+      </SidebarContainer>
+
+      <Content>
         <Outlet />
-      </div>
-    </div>
+      </Content>
+    </AppContainer>
   );
 };
