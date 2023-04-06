@@ -17,8 +17,6 @@ import { LabelLayout } from "../../../components/LabelLayout";
 
 import keySVG from "../../../assets/key.svg";
 
-import "./index.scss";
-
 export const ViewIssue: React.FC = () => {
   const { issueId } = useParams();
   const { user } = useUser();
@@ -46,36 +44,36 @@ export const ViewIssue: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <div className="box-create-city box-create-issue">
-        <h2>
-          Problema - #{" "}
-          {isLoadingIssue ? (
-            <Skeleton width={160} />
-          ) : (
-            `${issue?.id} (${issue?.status})`
-          )}
-        </h2>
+    <>
+      <h2>
+        Problema - #{" "}
+        {isLoadingIssue ? (
+          <Skeleton width={160} />
+        ) : (
+          `${issue?.id} (${issue?.status})`
+        )}
+      </h2>
 
-        <span>
-          Registrado em{" "}
-          {isLoadingIssue ? (
-            <Skeleton width={200} />
-          ) : (
-            issue?.createdAt && formatDate(issue?.createdAt)
-          )}
-        </span>
-        <span>
-          Atualizado em{" "}
-          {isLoadingIssue ? (
-            <Skeleton width={200} />
-          ) : (
-            issue?.updatedAt && formatDate(issue?.updatedAt)
-          )}
-        </span>
+      <span className="mt-4">
+        Registrado em{" "}
+        {isLoadingIssue ? (
+          <Skeleton width={200} />
+        ) : (
+          issue?.createdAt && formatDate(issue?.createdAt)
+        )}
+      </span>
+      <span>
+        Atualizado em{" "}
+        {isLoadingIssue ? (
+          <Skeleton width={200} />
+        ) : (
+          issue?.updatedAt && formatDate(issue?.updatedAt)
+        )}
+      </span>
 
-        <form className="auth-form">
-          <div className="grid-row issue-view-grid">
+      <form className="w-full flex flex-col gap-4 text-start mt-4">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-4">
             <div>
               <span>Tipo</span>
               {isLoadingIssue ? (
@@ -91,18 +89,22 @@ export const ViewIssue: React.FC = () => {
                   </div>
                 </LabelLayout>
               )}
+            </div>
 
-              <span>Descrição</span>
+            <div className="flex flex-col flex-1">
+              <span className="mb-0">Descrição</span>
               {isLoadingIssue ? (
                 <Skeleton height={60} />
               ) : (
-                <LabelLayout>
+                <LabelLayout className="flex-1">
                   <ReactSVG src={keySVG} />
                   <div>{issue?.description}</div>
                 </LabelLayout>
               )}
             </div>
+          </div>
 
+          <div className="flex flex-col gap-4">
             <div>
               <span>Relator</span>
               {isLoadingIssue ? (
@@ -115,7 +117,9 @@ export const ViewIssue: React.FC = () => {
                   </div>
                 </LabelLayout>
               )}
+            </div>
 
+            <div>
               <span>Fiscal</span>
               {/* 
                 Checar se é residente
@@ -171,8 +175,10 @@ export const ViewIssue: React.FC = () => {
                   </div>
                 </LabelLayout>
               )}
+            </div>
 
-              <span>Gestor responsável</span>
+            <div>
+              <span className="mt-4">Gestor responsável</span>
               {/* 
                 Checar se é gestor
                 - Se não for gestor:
@@ -228,31 +234,31 @@ export const ViewIssue: React.FC = () => {
               )}
             </div>
           </div>
+        </div>
 
-          <div className="map-container">
-            {isLoadingIssue && <Skeleton height={400} />}{" "}
-            {issue?.latitude && (
-              <MapContainer
-                center={[issue?.latitude, issue?.longitude] as LatLngExpression}
-                zoom={13}
-                scrollWheelZoom
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        <div className="map-container">
+          {isLoadingIssue && <Skeleton height={400} />}{" "}
+          {issue?.latitude && (
+            <MapContainer
+              center={[issue?.latitude, issue?.longitude] as LatLngExpression}
+              zoom={13}
+              scrollWheelZoom
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {issue?.latitude && (
+                <Marker
+                  position={
+                    [issue?.latitude, issue?.longitude] as LatLngExpression
+                  }
                 />
-                {issue?.latitude && (
-                  <Marker
-                    position={
-                      [issue?.latitude, issue?.longitude] as LatLngExpression
-                    }
-                  />
-                )}
-              </MapContainer>
-            )}
-          </div>
-        </form>
-      </div>
-    </div>
+              )}
+            </MapContainer>
+          )}
+        </div>
+      </form>
+    </>
   );
 };

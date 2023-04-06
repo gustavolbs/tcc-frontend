@@ -6,8 +6,9 @@ import { ReactSVG } from "react-svg";
 import { api } from "../../api/client";
 import { notify } from "../../helpers/notify";
 
-import { LabelLayout } from "../../components/LabelLayout";
+import { Box } from "../../components/Box";
 import { ButtonLayout } from "../../components/ButtonLayout";
+import { LabelLayout } from "../../components/LabelLayout";
 
 import emailSVG from "../../assets/email.svg";
 import keySVG from "../../assets/key.svg";
@@ -53,7 +54,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-blue-600 px-4">
-      <div className="flex flex-col items-center bg-white shadow-lg rounded-lg px-4 md:px-12 lg:px-24  py-10 w-full max-w-screen-md">
+      <Box className="max-w-screen-sm">
         <ReactSVG src={logoSVG} />
         <hr className="w-full my-8 border border-gray-300" />
         <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
@@ -61,7 +62,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
         </h2>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full flex flex-col gap-4"
+          className="w-full flex flex-col gap-4 text-start"
         >
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
@@ -72,13 +73,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                   type="text"
                   placeholder="Nome"
                   {...register("name", { required: true })}
-                  className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
-                    errors.name ? " has-error" : ""
-                  }`}
                 />
               </LabelLayout>
               {errors.name && (
-                <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+                <span className="block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
                   Este campo é obrigatório
                 </span>
               )}
@@ -92,13 +90,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                   type="text"
                   placeholder="Sobrenome"
                   {...register("surname", { required: true })}
-                  className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
-                    errors.surname ? " has-error" : ""
-                  }`}
                 />
               </LabelLayout>
               {errors.surname && (
-                <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+                <span className="block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
                   Este campo é obrigatório
                 </span>
               )}
@@ -113,13 +108,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                 type="email"
                 placeholder="Email"
                 {...register("email", { required: true })}
-                className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
-                  errors.email ? " has-error" : ""
-                }`}
               />
             </LabelLayout>
             {errors.email && (
-              <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+              <span className="block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
                 Este campo é obrigatório
               </span>
             )}
@@ -133,13 +125,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                 type="password"
                 placeholder="Senha"
                 {...register("password", { required: true })}
-                className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
-                  errors.password ? " has-error" : ""
-                }`}
               />
             </LabelLayout>
             {errors.password && (
-              <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+              <span className="block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
                 Este campo é obrigatório
               </span>
             )}
@@ -152,9 +141,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
                 id="city"
                 {...register("city", { required: true })}
                 // onChange={handleCityChange}
-                className={`w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500 form-input${
-                  errors.city ? " has-error" : ""
-                }`}
               >
                 <option value="">Selecione uma cidade</option>
                 {cities?.map((city) => (
@@ -165,7 +151,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
               </select>
             </LabelLayout>
             {errors.city && (
-              <span className="error-message block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
+              <span className="block text-red-500 text-sm mt-2 sm:mt-0 sm:text-base">
                 Este campo é obrigatório
               </span>
             )}
@@ -186,7 +172,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
             Já possui uma conta? Entrar
           </Link>
         </form>
-      </div>
+      </Box>
     </div>
   );
 };

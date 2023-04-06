@@ -104,7 +104,7 @@ export const Content = styled.div`
 `;
 
 interface SidebarLinkProps {
-  isRouteActive: boolean;
+  $isRouteActive: boolean;
 }
 
 export const SidebarLink = styled(Link)<SidebarLinkProps>`
@@ -114,7 +114,7 @@ export const SidebarLink = styled(Link)<SidebarLinkProps>`
   gap: 16px;
   min-width: fit-content;
   text-decoration: none;
-  ${(props) => (props.isRouteActive ? "color: #0062ff;" : "color: inherit;")}
+  ${(props) => (props.$isRouteActive ? "color: #0062ff;" : "color: inherit;")}
 
   transition: all ease 200ms;
 

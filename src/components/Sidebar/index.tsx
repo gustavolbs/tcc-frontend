@@ -6,6 +6,10 @@ import { useUser } from "../../contexts/UserContext";
 
 import { ROUTES } from "../../routes/routes";
 
+import { Box } from "../Box";
+import { Container } from "../Container";
+import { Menu as MenuButton } from "./MenuButton";
+
 import {
   AppContainer,
   Content,
@@ -13,7 +17,6 @@ import {
   SidebarContainer,
   SidebarLink,
 } from "./styles";
-import { Menu as MenuButton } from "./MenuButton";
 
 export const Sidebar: React.FC = () => {
   const navigate = useNavigate();
@@ -44,7 +47,7 @@ export const Sidebar: React.FC = () => {
                 <SidebarLink
                   key={route.path}
                   to={route.path}
-                  isRouteActive={isRouteActive(route.path)}
+                  $isRouteActive={isRouteActive(route.path)}
                 >
                   {route.icon} {route.title}
                 </SidebarLink>
@@ -60,7 +63,11 @@ export const Sidebar: React.FC = () => {
       </SidebarContainer>
 
       <Content>
-        <Outlet />
+        <Container>
+          <Box>
+            <Outlet />
+          </Box>
+        </Container>
       </Content>
     </AppContainer>
   );

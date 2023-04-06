@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
 
+import { Box } from "../../components/Box";
 import { ButtonLayout } from "../../components/ButtonLayout";
 import { LabelLayout } from "../../components/LabelLayout";
 
@@ -54,7 +55,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-blue-600 px-4">
-      <div className="flex flex-col items-center bg-white shadow-lg rounded-lg px-4 md:px-12 lg:px-24  py-10 w-full max-w-screen-md">
+      <Box className="max-w-screen-sm">
         <ReactSVG src={logoSVG} />
         <hr className="w-full my-8 border border-gray-300" />
         <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
@@ -70,7 +71,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               placeholder="Seu email"
               value={credentials.email}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
             />
           </LabelLayout>
           <LabelLayout htmlFor="password">
@@ -82,7 +82,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               placeholder="Sua senha"
               value={credentials.password}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:outline-none focus:border-blue-500"
             />
           </LabelLayout>
           <ButtonLayout
@@ -102,7 +101,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             Esqueceu sua senha?
           </a>
         </form>
-      </div>
+      </Box>
       <Link
         className="text-white font-semibold mt-8 cursor-pointer hover:underline"
         to="/register"

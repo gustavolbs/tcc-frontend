@@ -28,14 +28,16 @@ export const IssuesTable: React.FC<IssuesTableProps> = ({
   isLoading,
 }) => {
   return (
-    <div className="table-container">
+    <div className="overflow-x-auto w-full">
       {!issues?.length && !isLoading && <div>Nenhum resultado encontrado</div>}
 
-      <table>
+      <table className="w-full mt-8 border-collapse text-sm md:text-base">
         <thead>
-          <tr>
+          <tr className="bg-blue-500 font-bold">
             {TABLE_KEYS.map((key) => (
-              <td key={`issuesHeader#${key}`}>{key}</td>
+              <td key={`issuesHeader#${key}`} className="py-4 px-6 text-center">
+                {key}
+              </td>
             ))}
           </tr>
         </thead>
@@ -44,20 +46,29 @@ export const IssuesTable: React.FC<IssuesTableProps> = ({
           {isLoading ? (
             <SkeletonTableRow columns={TABLE_KEYS} />
           ) : (
-            issues?.map((issue) => (
-              <tr key={issue.id}>
-                <td>
+            issues?.map((issue, index) => (
+              <tr
+                key={issue.id}
+                className={`${index % 2 !== 0 ? "bg-blue-100" : ""}`}
+              >
+                <td className="text-center py-4 px-6">
                   <Link to={`/issues/${issue.id}`}>
                     {findCategoryName(issue.category)} #{issue.id}
                   </Link>
                 </td>
-                <td>{findStatusName(issue.status)}</td>
-                <td>
+                <td className="text-center py-4 px-6">
+                  {findStatusName(issue.status)}
+                </td>
+                <td className="text-center py-4 px-6">
                   {issue.reporter?.name} {issue.reporter?.surname}
                 </td>
-                <td>{formatDate(issue.updatedAt)}</td>
-                <td>{formatDate(issue.createdAt)}</td>
-                <td>
+                <td className="text-center py-4 px-6">
+                  {formatDate(issue.updatedAt)}
+                </td>
+                <td className="text-center py-4 px-6">
+                  {formatDate(issue.createdAt)}
+                </td>
+                <td className="text-center py-4 px-6">
                   <Link to={`/issues/${issue.id}`}>Visualizar</Link>
                 </td>
               </tr>
