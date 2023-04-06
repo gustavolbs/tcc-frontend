@@ -12,8 +12,6 @@ import { LabelLayout } from "../../../components/LabelLayout";
 
 import keySVG from "../../../assets/key.svg";
 
-import "./index.scss";
-
 export const CreateCity: React.FC = () => {
   const [position, setPosition] = useState<LatLngExpression>(BRAZIL_POSITION);
   const [cityName, setCityName] = useState<string>("");
@@ -58,41 +56,42 @@ export const CreateCity: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <div className="box-create-city">
-        <h2>Criar cidade</h2>
-        <form onSubmit={onSubmit} className="auth-form">
-          <LabelLayout htmlFor="city">
-            <ReactSVG src={keySVG} />
-            <input
-              type="text"
-              id="city"
-              placeholder="Nome da cidade"
-              value={cityName}
-              onChange={(e) => setCityName(e.target.value)}
+    <>
+      <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
+        Criar cidade
+      </h2>
+      <form onSubmit={onSubmit} className="w-full flex flex-col gap-4">
+        <LabelLayout htmlFor="city">
+          <ReactSVG src={keySVG} />
+          <input
+            type="text"
+            id="city"
+            placeholder="Nome da cidade"
+            value={cityName}
+            onChange={(e) => setCityName(e.target.value)}
+          />
+        </LabelLayout>
+
+        <div className="map-container">
+          <MapContainer center={position} zoom={4} scrollWheelZoom>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-          </LabelLayout>
+            {position && <Marker position={position} />}
+            <SetViewOnClick />
+          </MapContainer>
+        </div>
 
-          <div className="map-container">
-            <MapContainer center={position} zoom={4} scrollWheelZoom>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {position && <Marker position={position} />}
-              <SetViewOnClick />
-            </MapContainer>
-          </div>
-
-          <ButtonLayout
-            type="submit"
-            disabled={isLoading}
-            isLoading={isLoading}
-          >
-            Adicionar Cidade
-          </ButtonLayout>
-        </form>
-      </div>
-    </div>
+        <ButtonLayout
+          type="submit"
+          disabled={isLoading}
+          isLoading={isLoading}
+          className="w-full"
+        >
+          Adicionar Cidade
+        </ButtonLayout>
+      </form>
+    </>
   );
 };

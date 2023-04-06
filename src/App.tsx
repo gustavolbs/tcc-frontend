@@ -7,7 +7,8 @@ import { Toaster } from "react-hot-toast";
 import { UserProvider } from "./contexts/UserContext";
 import { CityProvider } from "./contexts/CityContext";
 
-import "./index.scss";
+import "./index.css";
+import "./app.scss";
 import "leaflet/dist/leaflet.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -47,7 +48,7 @@ export const App: React.FC = () => {
         <CityProvider>
           <Toaster
             containerStyle={{
-              top: window.innerWidth <= 500 ? 70 : 20,
+              top: window.innerWidth <= 640 ? 70 : 20,
               zIndex: 99999,
             }}
           />

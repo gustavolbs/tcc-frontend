@@ -20,8 +20,6 @@ import { SelectLayout } from "../../../components/SelectLayout";
 
 import keySVG from "../../../assets/key.svg";
 
-import "./index.scss";
-
 export const RegisterIssue: React.FC = () => {
   const { user } = useUser();
   const { city, isLoading: isLoadingCity } = useCity();
@@ -95,56 +93,61 @@ export const RegisterIssue: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <div className="box-create-city box-create-issue">
-        <h2>Registrar problema</h2>
-        <form onSubmit={onSubmit} className="auth-form">
-          <span>Tente dar uma descrição acurada do problema</span>
-          <div className="grid-row">
-            <SelectLayout
-              onChange={handleChangeCategory}
-              defaultValue={category.value}
-            >
-              {AVAILABLE_CATEGORIES.map((category) => (
-                <option key={category.value} value={category.value}>
-                  {category.name}
-                </option>
-              ))}
-            </SelectLayout>
-            <LabelLayout htmlFor="description">
-              <ReactSVG src={keySVG} />
-              <textarea
-                id="description"
-                placeholder={category.placeholder}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </LabelLayout>
-          </div>
+    <>
+      <h2>Registrar problema</h2>
+      <span className="text-start my-4">
+        Tente dar uma descrição acurada do problema
+      </span>
 
-          <div className="map-container">
-            {isLoadingCity && <Skeleton height={400} />}
-            {position && (
-              <MapContainer center={position} zoom={13} scrollWheelZoom>
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={position} />
-                <SetViewOnClick />
-              </MapContainer>
-            )}
-          </div>
-
-          <ButtonLayout
-            type="submit"
-            disabled={isLoading}
-            isLoading={isLoading}
+      <form
+        onSubmit={onSubmit}
+        className="w-full flex flex-col gap-4 text-start"
+      >
+        <div className="grid sm:grid-cols-2 gap-4">
+          <SelectLayout
+            onChange={handleChangeCategory}
+            defaultValue={category.value}
           >
-            Registrar
-          </ButtonLayout>
-        </form>
-      </div>
-    </div>
+            {AVAILABLE_CATEGORIES.map((category) => (
+              <option key={category.value} value={category.value}>
+                {category.name}
+              </option>
+            ))}
+          </SelectLayout>
+          <LabelLayout htmlFor="description">
+            <ReactSVG src={keySVG} />
+            <textarea
+              id="description"
+              placeholder={category.placeholder}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </LabelLayout>
+        </div>
+
+        <div className="map-container">
+          {isLoadingCity && <Skeleton height={400} />}
+          {position && (
+            <MapContainer center={position} zoom={13} scrollWheelZoom>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={position} />
+              <SetViewOnClick />
+            </MapContainer>
+          )}
+        </div>
+
+        <ButtonLayout
+          type="submit"
+          disabled={isLoading}
+          isLoading={isLoading}
+          className="w-full"
+        >
+          Registrar
+        </ButtonLayout>
+      </form>
+    </>
   );
 };
