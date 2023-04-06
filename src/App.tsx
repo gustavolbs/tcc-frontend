@@ -48,7 +48,7 @@ export const App: React.FC = () => {
         <CityProvider>
           <Toaster
             containerStyle={{
-              top: window.innerWidth <= 500 ? 70 : 20,
+              top: window.innerWidth <= 640 ? 70 : 20,
               zIndex: 99999,
             }}
           />
