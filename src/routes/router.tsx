@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { useUser } from "../contexts/UserContext";
 
@@ -54,6 +54,7 @@ export const AppRoutes: React.FC<RoutesProps> = ({
               }
             />
           ))}
+          <Route path="*" element={<Navigate to="/login" />} />
         </Route>
       </Routes>
     </BrowserRouter>

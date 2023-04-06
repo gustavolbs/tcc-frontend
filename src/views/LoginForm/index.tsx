@@ -46,7 +46,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       const { data } = await api.login(credentials);
       const token = data.token;
       onLogin(token);
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
     } finally {

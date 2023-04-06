@@ -45,7 +45,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLogin }) => {
 
       notify("success", "Usuário criado com sucesso!");
       onLogin(token);
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
     } finally {
