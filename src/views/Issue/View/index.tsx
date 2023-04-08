@@ -8,12 +8,16 @@ import Skeleton from "react-loading-skeleton";
 import { api } from "../../../api/client";
 import { notify } from "../../../helpers/notify";
 import { formatDate } from "../../../helpers/date";
+import { STATUSES, findStatusName } from "../../../helpers/status";
 import { AVAILABLE_CATEGORIES } from "../../../helpers/issue-categories";
+
+import { Issue } from "../../../interfaces/issue";
 
 import { useUser } from "../../../contexts/UserContext";
 
 import { ButtonLayout } from "../../../components/ButtonLayout";
 import { LabelLayout } from "../../../components/LabelLayout";
+import { RenderField } from "./RenderField";
 
 import keySVG from "../../../assets/key.svg";
 
@@ -28,14 +32,32 @@ export const ViewIssue: React.FC = () => {
     Number(issueId)
   );
 
+  const isIssueSolved = issue?.status === STATUSES[5].value;
+
   const handleAssignMe = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
     const field = (e.target as any)?.name as string;
 
     try {
+      const fieldResponse = field === "fiscal" ? "Fiscal" : "Gestor";
+
       await api.updateIssueAssignees(String(issueId), field, Number(user?.id));
-      notify("success", `Cargo atualizado com sucesso!`);
+      notify("success", `${fieldResponse} atualizado com sucesso!`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleMarkAsSolved = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      await api.markIssueAsSolved(String(issueId));
+      notify("success", `Problema resolvido com sucesso!`);
     } catch (error) {
       console.error(error);
     } finally {
@@ -46,13 +68,9 @@ export const ViewIssue: React.FC = () => {
   return (
     <>
       <h2>
-        Problema - #{" "}
-        {isLoadingIssue ? (
-          <Skeleton width={160} />
-        ) : (
-          `${issue?.id} (${issue?.status})`
-        )}
+        Problema - # {isLoadingIssue ? <Skeleton width={160} /> : issue?.id}
       </h2>
+      <span>({findStatusName(String(issue?.status))})</span>
 
       <span className="mt-4">
         Registrado em{" "}
@@ -105,133 +123,58 @@ export const ViewIssue: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-4">
-            <div>
-              <span>Relator</span>
-              {isLoadingIssue ? (
-                <Skeleton height={60} />
-              ) : (
-                <LabelLayout>
-                  <ReactSVG src={keySVG} />
-                  <div>
-                    {issue?.reporter?.name} {issue?.reporter?.surname}
-                  </div>
-                </LabelLayout>
-              )}
-            </div>
+            {issue?.reporterId === user?.id && !isIssueSolved ? (
+              <div>
+                <span>Marcar como resolvido</span>
+                <ButtonLayout
+                  className="w-full"
+                  onClick={handleMarkAsSolved}
+                  disabled={isLoading}
+                  isLoading={isLoading}
+                >
+                  Confirmar
+                </ButtonLayout>
+              </div>
+            ) : (
+              <div>
+                <span>Relator</span>
+                {isLoadingIssue ? (
+                  <Skeleton height={60} />
+                ) : (
+                  <LabelLayout>
+                    <ReactSVG src={keySVG} />
+                    <div>
+                      {issue?.reporter?.name} {issue?.reporter?.surname}
+                    </div>
+                  </LabelLayout>
+                )}
+              </div>
+            )}
 
             <div>
               <span>Fiscal</span>
-              {/* 
-                Checar se é residente
-                - Se for residente:
-                    - Se não tiver ninguém atribuido, mostrar botão de se atribuir
-                    - Se tiver alguém atribuido
-                        - Se for o próprio usuário, mostra botão de se desatribuir
-                        - Mostra o nome do usuário
-                    
-                    - Se não for residente:
-                        - Mostra o nome se tiver
-                        - Mostra msg de não tem, se n tiver
-                
-                */}
-              {isLoadingIssue ? (
-                <Skeleton height={60} />
-              ) : !isResident || issue?.reporterId === user?.id ? (
-                <LabelLayout>
-                  <ReactSVG src={keySVG} />
-                  <div>
-                    {issue?.fiscal
-                      ? `${issue?.fiscal?.name} ${issue?.fiscal?.surname}`
-                      : "Nenhum fiscal foi atríbuido ainda"}
-                  </div>
-                </LabelLayout>
-              ) : !issue?.fiscal ? (
-                <div>
-                  <ButtonLayout
-                    name="fiscalId"
-                    onClick={handleAssignMe}
-                    disabled={isLoading}
-                    isLoading={isLoading}
-                  >
-                    Me atribuir
-                  </ButtonLayout>
-                </div>
-              ) : issue?.fiscal.id === user?.id ? (
-                <div>
-                  <ButtonLayout
-                    name="fiscalId"
-                    onClick={handleAssignMe}
-                    disabled={isLoading}
-                    isLoading={isLoading}
-                  >
-                    Me desatribuir
-                  </ButtonLayout>
-                </div>
-              ) : (
-                <LabelLayout>
-                  <ReactSVG src={keySVG} />
-                  <div>
-                    {issue?.fiscal?.name} ${issue?.fiscal?.surname}
-                  </div>
-                </LabelLayout>
-              )}
+              <RenderField
+                isLoadingIssue={isLoadingIssue}
+                isIssueSolved={isIssueSolved}
+                isResident={isResident}
+                isLoading={isLoading}
+                issue={issue as Issue}
+                handleAssignMe={handleAssignMe}
+                field="fiscal"
+              />
             </div>
 
             <div>
               <span className="mt-4">Gestor responsável</span>
-              {/* 
-                Checar se é gestor
-                - Se não for gestor:
-                    - Mostra o nome se tiver
-                    - Mostra msg de não tem, se n tiver
-                - Se for gestor:
-                    - Se não tiver ninguém atribuido, mostrar botão de se atribuir
-                    - Se tiver alguém atribuido
-                        - Se for o próprio usuário, mostra botão de se desatribuir
-                        - Mostra o nome do usuário
-                
-                */}
-              {isLoadingIssue ? (
-                <Skeleton height={60} />
-              ) : isResident || issue?.reporterId === user?.id ? (
-                <LabelLayout>
-                  <ReactSVG src={keySVG} />
-                  <div>
-                    {issue?.manager
-                      ? `${issue?.manager?.name} ${issue?.manager?.surname}`
-                      : "Nenhum gestor foi atríbuido ainda"}
-                  </div>
-                </LabelLayout>
-              ) : !issue?.manager ? (
-                <div>
-                  <ButtonLayout
-                    name="managerId"
-                    onClick={handleAssignMe}
-                    disabled={isLoading}
-                    isLoading={isLoading}
-                  >
-                    Me atribuir
-                  </ButtonLayout>
-                </div>
-              ) : issue?.manager.id === user?.id ? (
-                <div>
-                  <ButtonLayout
-                    name="managerId"
-                    onClick={handleAssignMe}
-                    disabled={isLoading}
-                    isLoading={isLoading}
-                  >
-                    Me desatribuir
-                  </ButtonLayout>
-                </div>
-              ) : (
-                <LabelLayout>
-                  <ReactSVG src={keySVG} />
-                  <div>
-                    {issue?.manager?.name} ${issue?.manager?.surname}
-                  </div>
-                </LabelLayout>
-              )}
+              <RenderField
+                isLoadingIssue={isLoadingIssue}
+                isIssueSolved={isIssueSolved}
+                isResident={isResident}
+                isLoading={isLoading}
+                issue={issue as Issue}
+                handleAssignMe={handleAssignMe}
+                field="manager"
+              />
             </div>
           </div>
         </div>
