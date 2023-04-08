@@ -27,3 +27,10 @@ export const updateIssueAssignees = (
     field,
     userId,
   });
+
+export const markIssueAsSolved = (
+  issueId: string
+): Promise<AxiosResponse<Issue>> =>
+  axiosInstance.put(`/issue/${issueId}/solve`, {
+    issueId,
+  });
