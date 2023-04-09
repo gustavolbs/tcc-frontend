@@ -16,6 +16,8 @@ import { Issue } from "../../../interfaces/issue";
 import { useUser } from "../../../contexts/UserContext";
 
 import { ButtonLayout } from "../../../components/ButtonLayout";
+import { CommentInput } from "../../../components/CommentInput";
+import { CommentList } from "../../../components/CommentList";
 import { LabelLayout } from "../../../components/LabelLayout";
 import { RenderField } from "./RenderField";
 
@@ -25,12 +27,16 @@ export const ViewIssue: React.FC = () => {
   const { issueId } = useParams();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState(false);
+  const [commentText, setCommentText] = useState("");
 
   const isResident = user?.role === "resident";
 
   const { data: issue, isLoading: isLoadingIssue } = api.getIssue(
     Number(issueId)
   );
+
+  const { data: comments, isLoading: isLoadingComments } =
+    api.getAllCommentsFromIssue(Number(issueId));
 
   const isIssueSolved = issue?.status === STATUSES[5].value;
 
@@ -58,6 +64,32 @@ export const ViewIssue: React.FC = () => {
     try {
       await api.markIssueAsSolved(String(issueId));
       notify("success", `Problema resolvido com sucesso!`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddComment = async () => {
+    try {
+      await api.addComment(Number(issueId), {
+        text: commentText,
+        // commentId: data.comId,
+      });
+      setCommentText("");
+      notify("success", `Comentário realizado com sucesso!`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    setIsLoading(true);
+
+    try {
+      await api.deleteComment(Number(issueId), commentId);
+      notify("success", `Comentário deletado com sucesso!`);
     } catch (error) {
       console.error(error);
     } finally {
@@ -202,6 +234,32 @@ export const ViewIssue: React.FC = () => {
           )}
         </div>
       </form>
+
+      <h3 className="flex flex-col w-full mt-16 text-start text-xl">
+        Comentários
+      </h3>
+
+      <CommentInput
+        className="mt-4"
+        value={commentText}
+        setValue={setCommentText}
+        onClickSend={handleAddComment}
+        limit={1024}
+      />
+
+      {!isLoadingComments && comments && (
+        <details open className="flex flex-col w-full mt-8 text-start">
+          <summary className="text-start text-xl">Exibir comentários</summary>
+
+          <CommentList
+            className="mt-4"
+            data={comments}
+            issue={issue}
+            handleDelete={handleDeleteComment}
+            isLoading={isLoading}
+          />
+        </details>
+      )}
     </>
   );
 };

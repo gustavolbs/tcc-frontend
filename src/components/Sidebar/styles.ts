@@ -59,7 +59,7 @@ export const SidebarContainer = styled.div<NavbarProps>`
   margin-top: 5vh;
   overflow: hidden;
   white-space: nowrap;
-  z-index: 9999;
+  z-index: 99999;
   max-height: 90vh;
   height: 100vh;
   max-width: 64px;
