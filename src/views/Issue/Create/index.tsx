@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LatLngExpression } from "leaflet";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { ReactSVG } from "react-svg";
+import Skeleton from "react-loading-skeleton";
 
 import { api } from "../../../api/client";
 import { notify } from "../../../helpers/notify";
@@ -19,24 +20,24 @@ import { SelectLayout } from "../../../components/SelectLayout";
 
 import keySVG from "../../../assets/key.svg";
 
-import "./index.scss";
-
 export const RegisterIssue: React.FC = () => {
   const { user } = useUser();
-  const { city, isLoading } = useCity();
-
-  if (isLoading) {
-    return <div>Carregando...</div>;
-  }
+  const { city, isLoading: isLoadingCity } = useCity();
+  const [isLoading, setIsLoading] = useState(false);
+  const [category, setCategory] = useState<Category>(AVAILABLE_CATEGORIES[0]);
+  const [description, setDescription] = useState<string>("");
+  const [position, setPosition] = useState<LatLngExpression | undefined>();
 
   const INITIAL_POSITION = [
     city?.latitude,
     city?.longitude,
   ] as LatLngExpression;
 
-  const [category, setCategory] = useState<Category>(AVAILABLE_CATEGORIES[0]);
-  const [description, setDescription] = useState<string>("");
-  const [position, setPosition] = useState<LatLngExpression>(INITIAL_POSITION);
+  useEffect(() => {
+    if (city?.latitude && city?.longitude) {
+      setPosition(INITIAL_POSITION);
+    }
+  }, [city]);
 
   function SetViewOnClick() {
     const map = useMapEvents({
@@ -66,6 +67,7 @@ export const RegisterIssue: React.FC = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       await api.createIssue({
@@ -85,51 +87,67 @@ export const RegisterIssue: React.FC = () => {
       setDescription("");
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="container">
-      <div className="box-create-city box-create-issue">
-        <h2>Registrar problema</h2>
-        <form onSubmit={onSubmit} className="auth-form">
-          <span>Tente dar uma descrição acurada do problema</span>
-          <div className="grid-row">
-            <SelectLayout
-              onChange={handleChangeCategory}
-              defaultValue={category.value}
-            >
-              {AVAILABLE_CATEGORIES.map((category) => (
-                <option key={category.value} value={category.value}>
-                  {category.name}
-                </option>
-              ))}
-            </SelectLayout>
-            <LabelLayout htmlFor="description">
-              <ReactSVG src={keySVG} />
-              <textarea
-                id="description"
-                placeholder={category.placeholder}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </LabelLayout>
-          </div>
+    <>
+      <h2>Registrar problema</h2>
+      <span className="text-start my-4">
+        Tente dar uma descrição acurada do problema
+      </span>
 
-          <div className="map-container">
+      <form
+        onSubmit={onSubmit}
+        className="w-full flex flex-col gap-4 text-start"
+      >
+        <div className="grid sm:grid-cols-2 gap-4">
+          <SelectLayout
+            onChange={handleChangeCategory}
+            defaultValue={category.value}
+          >
+            {AVAILABLE_CATEGORIES.map((category) => (
+              <option key={category.value} value={category.value}>
+                {category.name}
+              </option>
+            ))}
+          </SelectLayout>
+          <LabelLayout htmlFor="description">
+            <ReactSVG src={keySVG} />
+            <textarea
+              id="description"
+              placeholder={category.placeholder}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </LabelLayout>
+        </div>
+
+        <div className="map-container">
+          {isLoadingCity && <Skeleton height={400} />}
+          {position && (
             <MapContainer center={position} zoom={13} scrollWheelZoom>
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              {position && <Marker position={position} />}
+              <Marker position={position} />
               <SetViewOnClick />
             </MapContainer>
-          </div>
+          )}
+        </div>
 
-          <ButtonLayout type="submit">Registrar</ButtonLayout>
-        </form>
-      </div>
-    </div>
+        <ButtonLayout
+          type="submit"
+          disabled={isLoading}
+          isLoading={isLoading}
+          className="w-full"
+        >
+          Registrar
+        </ButtonLayout>
+      </form>
+    </>
   );
 };

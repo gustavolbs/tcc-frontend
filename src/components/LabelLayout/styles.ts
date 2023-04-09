@@ -1,4 +1,7 @@
-.input-component {
+import styled from "styled-components";
+import { theme } from "tailwindcss/defaultConfig";
+
+export const StyledLabel = styled.label`
   border: 2px solid #e0e2e9;
   border-radius: 8px;
   display: flex;
@@ -41,19 +44,19 @@
     box-shadow: 0px 9px 12px rgba(0, 0, 0, 0.18);
     transition: all ease-in-out 200ms;
   }
-}
 
-@media only screen and (max-width: 500px) {
-  input,
-  textarea,
-  div + div,
-  select {
-    font-size: 12px;
-    line-height: 19px;
-
-    &::placeholder {
+  @media (max-width: 640px) {
+    input,
+    textarea,
+    div + div,
+    select {
       font-size: 12px;
       line-height: 19px;
+
+      &::placeholder {
+        font-size: 12px;
+        line-height: 19px;
+      }
     }
   }
-}
+`;

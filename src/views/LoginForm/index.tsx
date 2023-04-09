@@ -4,14 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { api } from "../../api/client";
 
+import { Box } from "../../components/Box";
 import { ButtonLayout } from "../../components/ButtonLayout";
 import { LabelLayout } from "../../components/LabelLayout";
 
 import emailSVG from "../../assets/email.svg";
 import keySVG from "../../assets/key.svg";
 import logoSVG from "../../assets/logo.svg";
-
-import "./index.scss";
 
 interface LoginFormProps {
   onLogin: (token: string) => void;
@@ -28,6 +27,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -39,23 +39,29 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
+
     try {
       const { data } = await api.login(credentials);
       const token = data.token;
       onLogin(token);
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="container">
-      <div className="box">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-600 px-4">
+      <Box className="max-w-screen-sm">
         <ReactSVG src={logoSVG} />
-        <hr />
-        <h2>Entrar</h2>
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <hr className="w-full my-8 border border-gray-300" />
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-4">
+          Entrar
+        </h2>
+        <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
           <LabelLayout htmlFor="email">
             <ReactSVG src={emailSVG} />
             <input
@@ -78,9 +84,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               onChange={handleInputChange}
             />
           </LabelLayout>
-          <ButtonLayout type="submit">Login</ButtonLayout>
+          <ButtonLayout
+            type="submit"
+            disabled={isLoading}
+            isLoading={isLoading}
+            className="w-full"
+          >
+            Login
+          </ButtonLayout>
           <a
-            className="recovery"
+            className="block text-center font-semibold text-blue-600 hover:text-blue-800 mt-4 cursor-not-allowed opacity-50"
             href="#"
             target="_self"
             rel="noopener noreferrer"
@@ -88,8 +101,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             Esqueceu sua senha?
           </a>
         </form>
-      </div>
-      <Link className="register" to="/register">
+      </Box>
+      <Link
+        className="text-white font-semibold mt-8 cursor-pointer hover:underline"
+        to="/register"
+      >
         Não possui uma conta? Criar uma conta
       </Link>
     </div>

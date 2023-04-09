@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { useUser } from "../contexts/UserContext";
 
@@ -28,11 +28,23 @@ export const AppRoutes: React.FC<RoutesProps> = ({
       <Routes>
         <Route
           path="/login"
-          element={!user && <LoginForm onLogin={onLogin} />}
+          element={
+            !user ? (
+              <LoginForm onLogin={onLogin} />
+            ) : (
+              <Navigate to="/dashboard" />
+            )
+          }
         />
         <Route
           path="/register"
-          element={!user && <RegisterForm onLogin={onLogin} />}
+          element={
+            !user ? (
+              <RegisterForm onLogin={onLogin} />
+            ) : (
+              <Navigate to="/dashboard" />
+            )
+          }
         />
         <Route element={<Sidebar />}>
           {ROUTES.map(({ path, isPrivate, isAdmin, component }) => (
@@ -54,6 +66,7 @@ export const AppRoutes: React.FC<RoutesProps> = ({
               }
             />
           ))}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Route>
       </Routes>
     </BrowserRouter>

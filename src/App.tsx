@@ -7,9 +7,11 @@ import { Toaster } from "react-hot-toast";
 import { UserProvider } from "./contexts/UserContext";
 import { CityProvider } from "./contexts/CityContext";
 
-import "./index.scss";
+import "./index.css";
+import "./app.scss";
 import "leaflet/dist/leaflet.css";
 import "react-loading-skeleton/dist/skeleton.css";
+import "react-responsive-modal/styles.css";
 
 import iconUrl from "./assets/marker-icon.png";
 import shadowUrl from "./assets/marker-shadow.png";
@@ -39,18 +41,18 @@ export const App: React.FC = () => {
   };
 
   return (
-    <SkeletonTheme
-      baseColor="#5294e0"
-      highlightColor="#96c7ff"
-      borderRadius="0.5rem"
-      duration={3}
-    >
+    <SkeletonTheme borderRadius="0.5rem" duration={3}>
       <UserProvider
         isTokenValid={isTokenValid}
         setIsTokenValid={setIsTokenValid}
       >
         <CityProvider>
-          <Toaster />
+          <Toaster
+            containerStyle={{
+              top: window.innerWidth <= 640 ? 70 : 20,
+              zIndex: 99999,
+            }}
+          />
           <AppRoutes isAuthenticated={isTokenValid} onLogin={handleLogin} />
         </CityProvider>
       </UserProvider>
