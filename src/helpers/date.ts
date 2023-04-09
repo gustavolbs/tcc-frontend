@@ -11,3 +11,15 @@ export const formatDate = (date: Date) => {
     second: "numeric",
   });
 };
+
+export const formatDateHour = (date: Date) => {
+  date = new Date(date);
+
+  return date.toLocaleDateString("pt-BR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};

@@ -2,6 +2,11 @@ import { createCity, getCities, getCity, getCityMembers } from "./routes/city";
 import { checkAuth, createUser, login } from "./routes/auth";
 import { getMe, updateRole } from "./routes/users";
 import {
+  addComment,
+  deleteComment,
+  getAllCommentsFromIssue,
+} from "./routes/comment";
+import {
   createIssue,
   getIssue,
   getAllIssuesFromCity,
@@ -26,11 +31,18 @@ export const createApiClient = () => {
     updateIssueAssignees,
   };
 
+  const comment = {
+    addComment,
+    deleteComment,
+    getAllCommentsFromIssue,
+  };
+
   return {
     ...auth,
     ...users,
     ...city,
     ...issue,
+    ...comment,
   };
 };
 

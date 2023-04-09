@@ -11,6 +11,7 @@ import "./index.css";
 import "./app.scss";
 import "leaflet/dist/leaflet.css";
 import "react-loading-skeleton/dist/skeleton.css";
+import "react-responsive-modal/styles.css";
 
 import iconUrl from "./assets/marker-icon.png";
 import shadowUrl from "./assets/marker-shadow.png";
