@@ -35,7 +35,10 @@ export const CommentList: React.FC<CommentListProps> = ({
   return (
     <div className={`w-full flex flex-col gap-4 ${className}`} {...props}>
       {data.map((comment) => {
-        const fullname = `${comment.author.name} ${comment.author.surname}`;
+        const fullname = `${comment?.author?.name || "Fake"} ${
+          comment?.author?.surname || "Name"
+        }`;
+        const authorName = comment?.author?.name || "FakeName";
 
         const userIsAuthor = comment.authorId === issue?.reporterId;
         const userIsFiscal = comment.authorId === issue?.fiscalId;
@@ -52,7 +55,7 @@ export const CommentList: React.FC<CommentListProps> = ({
         const userCanDelete = comment.authorId === user?.id;
 
         return (
-          <>
+          <div key={comment.id}>
             <Modal open={open} onClose={onCloseModal} center>
               <div className="p-4">
                 <h2 className="mt-4 text-2xl text-center mb-4">
@@ -98,13 +101,13 @@ export const CommentList: React.FC<CommentListProps> = ({
                 <div className="flex gap-2 flex-1 justify-start items-start">
                   <img
                     className="rounded-full w-12"
-                    src={`https://ui-avatars.com/api/name=${comment.author.name}&background=random`}
+                    src={`https://ui-avatars.com/api/name=${authorName}&background=random`}
                     alt={fullname}
                   />
 
                   <div className="flex flex-col flex-1">
                     <span className="font-semibold text-sm">
-                      {comment.author.name} ({role})
+                      {authorName} ({role})
                       <small className="font-medium text-xs ml-1">
                         {formatDateHour(comment.createdAt)}
                       </small>
@@ -152,13 +155,13 @@ export const CommentList: React.FC<CommentListProps> = ({
                 <div className="flex gap-2 flex-1 w-full justify-start items-start">
                   <img
                     className="rounded-full w-12"
-                    src={`https://ui-avatars.com/api/name=${comment.author.name}&background=random`}
+                    src={`https://ui-avatars.com/api/name=${authorName}&background=random`}
                     alt={fullname}
                   />
 
                   <div className="flex flex-1  justify-between items-start">
                     <span className="font-semibold text-sm">
-                      {comment.author.name} ({role})
+                      {authorName} ({role})
                       <br />
                       <small className="font-medium text-xs">
                         {formatDateHour(comment.createdAt)}
@@ -200,7 +203,7 @@ export const CommentList: React.FC<CommentListProps> = ({
                 </div>
               </div>
             </>
-          </>
+          </div>
         );
       })}
     </div>
