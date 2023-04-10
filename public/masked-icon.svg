@@ -1,0 +1,46 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3000 3000" width="256" height="256">
+	<title>517-ai</title>
+	<style>
+		.s0 { fill: #ffffff } 
+		.s1 { fill: #198bca } 
+		.s2 { fill: #0b79b7 } 
+		.s3 { fill: #0d6394 } 
+		.s4 { fill: #0d4972 } 
+		.s5 { fill: #139dd9 } 
+		.s6 { fill: #9cd6ef } 
+		.s7 { fill: #26b2e3 } 
+		.s8 { fill: #66c6eb } 
+		.s9 { fill: #2aa9e1 } 
+	</style>
+	<g id="Background">
+		<path id="&lt;Path&gt;" class="s0" d="m3000 3000h-3000v-3000h3000z"/>
+	</g>
+	<g id="Logo">
+		<g id="&lt;Group&gt;">
+			<path id="&lt;Path&gt;" class="s1" d="m612 987.4v512.4l336.7-318z"/>
+			<path id="&lt;Path&gt;" class="s2" d="m948.7 1181.8l-336.7 318h336.7z"/>
+			<path id="&lt;Path&gt;" class="s3" d="m612 1499.8l336.7 318v-318z"/>
+			<path id="&lt;Path&gt;" class="s4" d="m612 2012.2l336.7-194.4-336.7-318z"/>
+			<path id="&lt;Path&gt;" class="s5" d="m612 987.4l336.7 194.4 107-450.6z"/>
+			<path id="&lt;Path&gt;" class="s6" d="m1055.7 731.2l443.8 132.6v-388.8z"/>
+			<path id="&lt;Path&gt;" class="s4" d="m1499.5 475v388.8l453.5-127z"/>
+			<path id="&lt;Path&gt;" class="s1" d="m1953 736.8l97.3 445 336.7-194.4z"/>
+			<path id="&lt;Path&gt;" class="s5" d="m2050.3 1181.8l336.7 318v-512.4z"/>
+			<path id="&lt;Path&gt;" class="s6" d="m2387 2012.2v-512.4l-336.7 318z"/>
+			<path id="&lt;Path&gt;" class="s7" d="m948.7 1181.8l275.4-159-168.4-291.6z"/>
+			<path id="&lt;Path&gt;" class="s8" d="m1055.7 731.2l168.4 291.6 275.4-159z"/>
+			<path id="&lt;Path&gt;" class="s3" d="m1499.5 2524.5l453.5-261.7-453.5-127.1z"/>
+			<path id="&lt;Path&gt;" class="s9" d="m2387 2012.2l-336.7-194.4-97.3 445z"/>
+			<path id="&lt;Path&gt;" class="s1" d="m1774.9 1976.7l178.1 286.1 97.3-445z"/>
+			<path id="&lt;Path&gt;" class="s4" d="m1499.5 2135.7l453.5 127.1-178.1-286.1z"/>
+			<path id="&lt;Path&gt;" class="s2" d="m1499.5 2135.7l-443.8 132.7 443.8 256.1z"/>
+			<path id="&lt;Path&gt;" class="s8" d="m612 2012.2l443.7 256.2-107-450.6z"/>
+			<path id="&lt;Path&gt;" class="s5" d="m948.7 1817.8l107 450.6 168.4-291.7z"/>
+			<path id="&lt;Path&gt;" class="s1" d="m1224.1 1976.7l-168.4 291.7 443.8-132.7z"/>
+			<path id="&lt;Path&gt;" class="s7" d="m2050.3 1181.8v318h336.7z"/>
+			<path id="&lt;Path&gt;" class="s8" d="m2387 1499.8h-336.7v318z"/>
+			<path id="&lt;Path&gt;" class="s3" d="m1953 736.8l-453.5 127 275.4 159 178.1-286z"/>
+			<path id="&lt;Path&gt;" class="s2" d="m1953 736.8l-178.1 286 275.4 159z"/>
+		</g>
+	</g>
+</svg>

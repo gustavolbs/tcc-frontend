@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FiShare } from "react-icons/fi";
 import { ReactSVG } from "react-svg";
 import { LatLngExpression } from "leaflet";
 import { useParams } from "react-router-dom";
@@ -97,8 +98,30 @@ export const ViewIssue: React.FC = () => {
     }
   };
 
+  const handleShare = async () => {
+    const isMobile = /Mobile/.test(navigator.userAgent);
+
+    if (isMobile && navigator.share) {
+      await navigator.share({
+        url: window.location.href,
+      });
+    } else {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        notify("success", "Link copiado com sucesso!");
+      } catch (err) {
+        notify("error", "Ocorreu um erro ao copiar o link!");
+      }
+    }
+  };
+
   return (
     <>
+      <FiShare
+        onClick={handleShare}
+        className="block cursor-pointer bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-900 w-10 h-auto absolute right-2 top-2   p-2 rounded-full"
+      />
+
       <h2>
         Problema - # {isLoadingIssue ? <Skeleton width={160} /> : issue?.id}
       </h2>
