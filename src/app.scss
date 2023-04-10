@@ -8,3 +8,10 @@ tbody {
 .leaflet-container {
   height: 24rem;
 }
+
+.installable {
+  svg {
+    height: 2.5rem;
+    width: fit-content;
+  }
+}
