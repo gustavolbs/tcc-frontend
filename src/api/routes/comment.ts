@@ -16,10 +16,8 @@ export const addComment = (
 export const deleteComment = (
   issueId: number,
   commentId: number
-): Promise<AxiosResponse<Comment>> =>
-  axiosInstance.post<Comment>(`/issue/${issueId}/comment/delete`, {
-    commentId,
-  });
+): Promise<AxiosResponse> =>
+  axiosInstance.delete(`/issue/${issueId}/comment/delete/${commentId}`);
 
 export const getAllCommentsFromIssue = (issueId: number) =>
   useFetch<Comment[]>(issueId ? `/issue/${issueId}/comment/all` : null);

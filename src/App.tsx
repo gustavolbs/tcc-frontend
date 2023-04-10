@@ -90,7 +90,6 @@ export const App: React.FC = () => {
               className="z-[99998] fixed bottom-0 w-full bg-blue-100 p-4 flex items-center justify-center gap-2"
               onClick={handleInstallClick}
             >
-              {" "}
               <ReactSVG src={logoSVG} className="installable w-fit" />
               Instale nosso app e tenha uma melhor experiência
             </button>

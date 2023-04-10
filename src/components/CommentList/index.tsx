@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { DeleteModal } from "./DeleteModal";
+import { DeleteModal } from "../DeleteModal";
 import { MobileCommentList } from "./MobileCommentList";
 import { DesktopCommentList } from "./DesktopCommentList";
 
@@ -44,6 +44,7 @@ export const CommentList: React.FC<CommentListProps> = ({
         onCloseModal={onCloseModal}
         open={open}
         selected={selected}
+        objectName="comentário"
       />
 
       {data.map((comment) => {

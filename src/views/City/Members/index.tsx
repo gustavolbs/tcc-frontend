@@ -50,7 +50,7 @@ export const CityMembers: React.FC = () => {
         cidade.
       </span>
 
-      {members?.length && !isLoadingMembers && (
+      {members?.length && !isLoadingMembers ? (
         <LabelLayout htmlFor="email" className="w-full sm:w-1/2">
           <ReactSVG src={emailSVG} />
           <input
@@ -61,7 +61,7 @@ export const CityMembers: React.FC = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </LabelLayout>
-      )}
+      ) : null}
 
       <MembersTable
         availableRoles={availableRoles}
