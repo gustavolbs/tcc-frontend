@@ -87,7 +87,7 @@ export const App: React.FC = () => {
           />
           {isInstallable && (
             <button
-              className="fixed bottom-0 w-full bg-blue-100 p-4 flex items-center justify-center gap-2"
+              className="z-[99998] fixed bottom-0 w-full bg-blue-100 p-4 flex items-center justify-center gap-2"
               onClick={handleInstallClick}
             >
               {" "}
