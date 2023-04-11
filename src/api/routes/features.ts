@@ -5,9 +5,10 @@ import { axiosInstance, useFetch } from "../instance";
 import { FeatureFlag } from "../../interfaces/feature-flag";
 
 export const createFeatureFlag = (
-  name: string
+  slug: string,
+  description: string
 ): Promise<AxiosResponse<FeatureFlag>> =>
-  axiosInstance.post<FeatureFlag>("/features/create", { name });
+  axiosInstance.post<FeatureFlag>("/features/create", { slug, description });
 
 export const getFeatureFlag = (featureId: number) =>
   useFetch<FeatureFlag>(featureId ? `/features/${featureId}` : null);

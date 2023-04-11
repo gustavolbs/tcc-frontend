@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import { AiFillDelete, AiFillEdit, AiOutlineLink } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 
 import { api } from "../../api/client";
 import { notify } from "../../helpers/notify";
-
-import { City } from "../../interfaces/city";
-import { User } from "../../interfaces/user";
-
-import { useUser } from "../../contexts/UserContext";
 
 import { DeleteModal } from "../DeleteModal";
 import { SkeletonTableRow } from "../Skeletons/TableRow";
@@ -21,7 +15,7 @@ interface FeatureFlagsTableProps {
   isLoadingFeatures: boolean;
 }
 
-const TABLE_KEYS = ["ID", "Nome", "Status", "Editar", "Deletar"];
+const TABLE_KEYS = ["ID", "Slug", "Descrição", "Editar", "Deletar"];
 
 export const FeatureFlagsTable: React.FC<FeatureFlagsTableProps> = ({
   features,
@@ -42,7 +36,6 @@ export const FeatureFlagsTable: React.FC<FeatureFlagsTableProps> = ({
     mode: "add" | "edit",
     feature?: FeatureFlag | undefined
   ) => {
-    console.log("FEATURE:", feature);
     setOpenAddEditModal({
       open: true,
       mode,
@@ -63,11 +56,11 @@ export const FeatureFlagsTable: React.FC<FeatureFlagsTableProps> = ({
 
   const onCloseDeleteModal = () => setOpenDeleteModal(false);
 
-  const handleAddFeature = async (featureName: string) => {
+  const handleAddFeature = async (slug: string, description: string) => {
     setIsLoading(true);
 
     try {
-      await api.createFeatureFlag(featureName);
+      await api.createFeatureFlag(slug, description);
       notify("success", `Feature Flag adicionada com sucesso!`);
     } catch (error) {
       console.error(error);
@@ -121,17 +114,17 @@ export const FeatureFlagsTable: React.FC<FeatureFlagsTableProps> = ({
         open={openDeleteModal}
         selected={Number(selectedFeature?.id)}
         objectName="feature flag"
-        dataName={selectedFeature?.name}
+        dataName={selectedFeature?.slug}
       />
 
-      <div className="flex flex-row-reverse justify-between items-baseline mt-4">
+      <div className="flex justify-between items-baseline mt-4">
         {!features?.length && !isLoadingFeatures && (
           <div>Nenhum resultado encontrado</div>
         )}
         <ButtonLayout
           onClick={() => onOpenAddEditModal("add", undefined)}
           type="button"
-          className="py-1.5 mx-0"
+          className="py-1.5 mx-0 mr-0"
         >
           Adicionar
         </ButtonLayout>
@@ -161,10 +154,8 @@ export const FeatureFlagsTable: React.FC<FeatureFlagsTableProps> = ({
                 className={`${index % 2 !== 0 ? "bg-blue-100" : ""}`}
               >
                 <td className="text-center py-4 px-6">{feature.id}</td>
-                <td className="text-center py-4 px-6">{feature.name}</td>
-                <td className="text-center py-4 px-6">
-                  {feature.status ? "Ativa" : "Inativa"}
-                </td>
+                <td className="text-center py-4 px-6">{feature.slug}</td>
+                <td className="text-center py-4 px-6">{feature.description}</td>
                 <td
                   className="text-center py-4 px-6 text-center transition text-blue-800 hover:text-blue-500 cursor-pointer"
                   onClick={() => onOpenAddEditModal("edit", feature)}
