@@ -32,7 +32,9 @@ export const EditCity: React.FC = () => {
     if (city) {
       setCityName(city?.name);
       setPosition([city?.latitude, city?.longitude] as LatLngExpression);
-      setFeatureFlags(city?.featureFlags);
+      if (city?.featureFlags) {
+        setFeatureFlags(city?.featureFlags);
+      }
     }
   }, [city]);
 
