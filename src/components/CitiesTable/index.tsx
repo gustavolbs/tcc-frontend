@@ -8,10 +8,12 @@ import { notify } from "../../helpers/notify";
 import { City } from "../../interfaces/city";
 import { User } from "../../interfaces/user";
 
+import { useCity } from "../../contexts/CityContext";
 import { useUser } from "../../contexts/UserContext";
 
 import { DeleteModal } from "../DeleteModal";
 import { SkeletonTableRow } from "../Skeletons/TableRow";
+import { ButtonLayout } from "../ButtonLayout";
 
 interface CitiesTableProps {
   cities: City[] | undefined;
@@ -25,6 +27,7 @@ export const CitiesTable: React.FC<CitiesTableProps> = ({
   isLoadingCities,
 }) => {
   const { setCurrentUser } = useUser();
+  const { city, setCurrentCity } = useCity();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
@@ -38,6 +41,9 @@ export const CitiesTable: React.FC<CitiesTableProps> = ({
 
   const handleAcessCity = (cityId: number) => {
     setCurrentUser((curr) => ({ ...(curr as User), city: cityId }));
+    if (cityId !== city?.id) {
+      setCurrentCity(null);
+    }
   };
 
   const handleDeleteCity = async () => {
@@ -65,9 +71,17 @@ export const CitiesTable: React.FC<CitiesTableProps> = ({
         dataName={selectedCity?.name}
       />
 
-      {!cities?.length && !isLoadingCities && (
-        <div className="mt-4">Nenhum resultado encontrado</div>
-      )}
+      <div className="flex justify-between items-baseline mt-4">
+        {!cities?.length && !isLoadingCities && (
+          <div>Nenhum resultado encontrado</div>
+        )}
+
+        <Link to="/city/create" className="ml-auto">
+          <ButtonLayout type="button" className="py-1.5">
+            Adicionar
+          </ButtonLayout>
+        </Link>
+      </div>
 
       <table className="w-full mt-8 border-collapse text-sm md:text-base">
         <thead>

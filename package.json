@@ -24,6 +24,7 @@
     "react-responsive-modal": "^6.4.1",
     "react-router-dom": "^6.9.0",
     "react-svg": "^16.1.6",
+    "react-switch": "^7.0.0",
     "styled-components": "^5.3.9",
     "swr": "^2.1.1"
   },

@@ -13,6 +13,7 @@ import { EditCity } from "../views/City/Edit";
 import { MyRquests } from "../views/MyRquests";
 import { RegisterIssue } from "../views/Issue/Create";
 import { ViewIssue } from "../views/Issue/View";
+import { FeatureFlagManager } from "../views/Features/Manage";
 
 interface RouteConfig {
   icon: JSX.Element | null;
@@ -78,7 +79,7 @@ export const ADMIN_ROUTES: RouteConfig[] = [
     isPrivate: false,
     isAdmin: true,
     component: <CreateCity />,
-    shouldShowOnSidebar: true,
+    shouldShowOnSidebar: false,
     title: "Criar Cidade",
   },
   {
@@ -98,5 +99,14 @@ export const ADMIN_ROUTES: RouteConfig[] = [
     component: <CityManager />,
     shouldShowOnSidebar: true,
     title: "Gerenciar Cidades",
+  },
+  {
+    icon: null,
+    path: "/feature/manager",
+    isPrivate: false,
+    isAdmin: true,
+    component: <FeatureFlagManager />,
+    shouldShowOnSidebar: true,
+    title: "Gerenciar Features",
   },
 ];

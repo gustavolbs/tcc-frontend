@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 
 import { axiosInstance, useFetch } from "../instance";
 
-import { City } from "../../interfaces/city";
+import { City, FullCity } from "../../interfaces/city";
 import { User } from "../../interfaces/user";
 
 export const createCity = (
@@ -13,7 +13,7 @@ export const createCity = (
 export const getCities = () => useFetch<City[]>("/city/all");
 
 export const getCity = (cityId: number) =>
-  useFetch<City>(cityId ? `/city/${cityId}` : null);
+  useFetch<FullCity>(cityId ? `/city/${cityId}` : null);
 
 export const getCityMembers = (cityId: number) =>
   useFetch<User[]>(cityId ? `/users/all/${cityId}` : null);
