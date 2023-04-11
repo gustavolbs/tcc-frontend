@@ -1,5 +1,16 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { ADMIN_ROUTES, ROUTES } from "../../routes/routes";
+
+const sidebarRoutes = [...ROUTES, ...ADMIN_ROUTES].reduce(
+  (acc, cur) => (cur.shouldShowOnSidebar ? acc + 1 : acc),
+  0
+);
+
+const sidebarPadding = "32px";
+const sidebarIcon = "32px";
+const sidebarAdminGap = "40px";
+const sidebarLogout = "64px";
 
 export const AppContainer = styled.div`
   display: flex;
@@ -87,7 +98,11 @@ export const SidebarContainer = styled.div<NavbarProps>`
       max-width: unset;
     }
 
-    ${(props) => props.isMenuOpen && "height: 300px;"}
+    ${(props) =>
+      props.isMenuOpen &&
+      `height: calc(${sidebarPadding} + ${sidebarIcon} + ${
+        40 * sidebarRoutes
+      }px + ${sidebarAdminGap} + ${sidebarLogout});`}
     ${(props) => props.isMenuOpen && "max-width: unset;"}
   }
 `;

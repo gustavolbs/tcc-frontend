@@ -12,6 +12,7 @@ import { useUser } from "../../contexts/UserContext";
 
 import { DeleteModal } from "../DeleteModal";
 import { SkeletonTableRow } from "../Skeletons/TableRow";
+import { ButtonLayout } from "../ButtonLayout";
 
 interface CitiesTableProps {
   cities: City[] | undefined;
@@ -65,9 +66,17 @@ export const CitiesTable: React.FC<CitiesTableProps> = ({
         dataName={selectedCity?.name}
       />
 
-      {!cities?.length && !isLoadingCities && (
-        <div className="mt-4">Nenhum resultado encontrado</div>
-      )}
+      <div className="flex flex-row-reverse justify-between items-baseline mt-4">
+        {!cities?.length && !isLoadingCities && (
+          <div>Nenhum resultado encontrado</div>
+        )}
+
+        <Link to="/city/create">
+          <ButtonLayout type="button" className="py-1.5 mx-0">
+            Adicionar
+          </ButtonLayout>
+        </Link>
+      </div>
 
       <table className="w-full mt-8 border-collapse text-sm md:text-base">
         <thead>
