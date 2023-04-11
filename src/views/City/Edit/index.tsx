@@ -89,7 +89,7 @@ export const EditCity: React.FC = () => {
 
         <div className="map-container">
           {isLoadingCity && <Skeleton height={400} />}
-          {city?.latitude && position !== BRAZIL_POSITION && (
+          {city?.latitude != undefined && position !== BRAZIL_POSITION && (
             <MapContainer center={position} zoom={13} scrollWheelZoom>
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
