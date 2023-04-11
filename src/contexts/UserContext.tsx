@@ -10,6 +10,7 @@ interface UserContextData {
   isLoading: boolean;
   isOwner: boolean;
   logout: () => void;
+  setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>;
   user: User | null;
 }
 
@@ -18,6 +19,7 @@ const UserContext = createContext<UserContextData>({
   isLoading: true,
   isOwner: false,
   logout: () => {},
+  setCurrentUser: () => {},
   user: null,
 });
 
@@ -74,6 +76,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
         isOwner,
         logout,
         user: currentUser,
+        setCurrentUser,
       }}
     >
       {children}

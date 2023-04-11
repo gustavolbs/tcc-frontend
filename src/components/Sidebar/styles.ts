@@ -104,7 +104,7 @@ export const Content = styled.div`
 `;
 
 interface SidebarLinkProps {
-  $isRouteActive: boolean;
+  $isRouteActive?: boolean;
 }
 
 export const SidebarLink = styled(Link)<SidebarLinkProps>`

@@ -1,5 +1,4 @@
 import {
-  AiOutlineBank,
   AiOutlineBook,
   AiOutlineForm,
   AiOutlineHome,
@@ -7,8 +6,10 @@ import {
 } from "react-icons/ai";
 
 import { CityMembers } from "../views/City/Members";
+import { CityManager } from "../views/City/Manage";
 import { CreateCity } from "../views/City/Create";
 import { Dashboard } from "../views/Dashboard";
+import { EditCity } from "../views/City/Edit";
 import { MyRquests } from "../views/MyRquests";
 import { RegisterIssue } from "../views/Issue/Create";
 import { ViewIssue } from "../views/Issue/View";
@@ -68,13 +69,34 @@ export const ROUTES: RouteConfig[] = [
     component: <ViewIssue />,
     shouldShowOnSidebar: false,
   },
+];
+
+export const ADMIN_ROUTES: RouteConfig[] = [
   {
-    icon: <AiOutlineBank />,
+    icon: null,
     path: "/city/create",
     isPrivate: false,
     isAdmin: true,
     component: <CreateCity />,
     shouldShowOnSidebar: true,
     title: "Criar Cidade",
+  },
+  {
+    icon: null,
+    path: "/city/edit",
+    isPrivate: false,
+    isAdmin: true,
+    component: <EditCity />,
+    shouldShowOnSidebar: false,
+    title: "Editar Cidade",
+  },
+  {
+    icon: null,
+    path: "/city/manager",
+    isPrivate: false,
+    isAdmin: true,
+    component: <CityManager />,
+    shouldShowOnSidebar: true,
+    title: "Gerenciar Cidades",
   },
 ];

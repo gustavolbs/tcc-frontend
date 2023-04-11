@@ -29,7 +29,9 @@ export const IssuesTable: React.FC<IssuesTableProps> = ({
 }) => {
   return (
     <div className="overflow-x-auto w-full">
-      {!issues?.length && !isLoading && <div>Nenhum resultado encontrado</div>}
+      {!issues?.length && !isLoading && (
+        <div className="mt-4">Nenhum resultado encontrado</div>
+      )}
 
       <table className="w-full mt-8 border-collapse text-sm md:text-base">
         <thead>

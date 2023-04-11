@@ -7,6 +7,8 @@ interface DeleteModalProps {
   isLoading: boolean;
   handleDelete: (value: number) => void;
   selected: number | null;
+  objectName: string;
+  dataName?: string;
 }
 
 export const DeleteModal: React.FC<DeleteModalProps> = ({
@@ -15,19 +17,22 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
   handleDelete,
   selected,
   isLoading,
+  objectName,
+  dataName,
 }) => {
-  const handleConfirmDelete = (commentId: number) => {
-    handleDelete(commentId);
+  const handleConfirmDelete = (id: number) => {
+    handleDelete(id);
     onCloseModal();
   };
 
   return (
     <Modal open={open} onClose={onCloseModal} center>
       <div className="p-4">
-        <h2 className="mt-4 text-2xl text-center mb-4">Deletar comentário</h2>
+        <h2 className="mt-4 text-2xl text-center mb-4">Deletar {objectName}</h2>
 
         <p className="text-center mb-8">
-          Deseja realmente excluir o comentário?
+          Deseja realmente excluir{" "}
+          {dataName ? <b>{dataName}</b> : `o ${objectName}`}?
           <br />
           <b>Essa ação não poderá ser desfeita.</b>
         </p>
