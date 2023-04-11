@@ -12,8 +12,10 @@ import { formatDate } from "../../../helpers/date";
 import { STATUSES, findStatusName } from "../../../helpers/status";
 import { AVAILABLE_CATEGORIES } from "../../../helpers/issue-categories";
 
+import { FFS } from "../../../interfaces/feature-flag";
 import { Issue } from "../../../interfaces/issue";
 
+import { useCity } from "../../../contexts/CityContext";
 import { useUser } from "../../../contexts/UserContext";
 
 import { ButtonLayout } from "../../../components/ButtonLayout";
@@ -27,10 +29,12 @@ import keySVG from "../../../assets/key.svg";
 export const ViewIssue: React.FC = () => {
   const { issueId } = useParams();
   const { user } = useUser();
+  const { isFeatureEnabled } = useCity();
   const [isLoading, setIsLoading] = useState(false);
   const [commentText, setCommentText] = useState("");
 
   const isResident = user?.role === "resident";
+  const enableConversations = isFeatureEnabled(FFS.CONVERSATIONS);
 
   const { data: issue, isLoading: isLoadingIssue } = api.getIssue(
     Number(issueId)
@@ -258,31 +262,37 @@ export const ViewIssue: React.FC = () => {
         </div>
       </form>
 
-      <h3 className="flex flex-col w-full mt-16 text-start text-xl">
-        Comentários
-      </h3>
+      {enableConversations ? (
+        <>
+          <h3 className="flex flex-col w-full mt-16 text-start text-xl">
+            Comentários
+          </h3>
 
-      <CommentInput
-        className="mt-4"
-        value={commentText}
-        setValue={setCommentText}
-        onClickSend={handleAddComment}
-        limit={1024}
-      />
-
-      {!isLoadingComments && comments && (
-        <details open className="flex flex-col w-full mt-8 text-start">
-          <summary className="text-start text-xl">Exibir comentários</summary>
-
-          <CommentList
+          <CommentInput
             className="mt-4"
-            data={comments}
-            issue={issue}
-            handleDelete={handleDeleteComment}
-            isLoading={isLoading}
+            value={commentText}
+            setValue={setCommentText}
+            onClickSend={handleAddComment}
+            limit={1024}
           />
-        </details>
-      )}
+
+          {!isLoadingComments && comments && (
+            <details open className="flex flex-col w-full mt-8 text-start">
+              <summary className="text-start text-xl">
+                Exibir comentários
+              </summary>
+
+              <CommentList
+                className="mt-4"
+                data={comments}
+                issue={issue}
+                handleDelete={handleDeleteComment}
+                isLoading={isLoading}
+              />
+            </details>
+          )}
+        </>
+      ) : null}
     </>
   );
 };

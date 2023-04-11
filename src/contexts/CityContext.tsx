@@ -11,6 +11,7 @@ interface CityContextData {
   isLoading: boolean;
   isError: boolean;
   setCurrentCity: React.Dispatch<React.SetStateAction<City | null>>;
+  isFeatureEnabled: (slug: string) => boolean;
 }
 
 const CityContext = createContext<CityContextData>({
@@ -18,6 +19,7 @@ const CityContext = createContext<CityContextData>({
   isLoading: true,
   isError: false,
   setCurrentCity: () => {},
+  isFeatureEnabled: () => false,
 });
 
 export const useCity = () => useContext(CityContext);
@@ -48,9 +50,22 @@ export const CityProvider: React.FC<React.PropsWithChildren> = ({
     }
   }, [city]);
 
+  const isFeatureEnabled = (slug: string): boolean => {
+    return (
+      currentCity?.featureFlags?.find((flag) => flag.slug === slug)?.status ||
+      false
+    );
+  };
+
   return (
     <CityContext.Provider
-      value={{ city: currentCity || null, isLoading, isError, setCurrentCity }}
+      value={{
+        city: currentCity || null,
+        isLoading,
+        isError,
+        setCurrentCity,
+        isFeatureEnabled,
+      }}
     >
       {children}
     </CityContext.Provider>

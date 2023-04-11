@@ -12,6 +12,11 @@ export const makeLinksClickable = (text: string) => {
 export const slugify = (...args: (string | number)[]): string => {
   const value = args.join(" ");
 
+  // check if the value is already in slug format
+  if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) {
+    return value;
+  }
+
   return value
     .normalize("NFD") // split an accented letter in the base letter and the acent
     .replace(/[\u0300-\u036f]/g, "") // remove all previously split accents
