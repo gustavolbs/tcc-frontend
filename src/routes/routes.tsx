@@ -20,6 +20,7 @@ interface RouteConfig {
   path: string;
   isPrivate: boolean;
   isAdmin: boolean;
+  canManage?: boolean;
   component: JSX.Element;
   shouldShowOnSidebar: boolean;
   title?: string;
@@ -49,6 +50,7 @@ export const ROUTES: RouteConfig[] = [
     path: "/city/members",
     isPrivate: true,
     isAdmin: false,
+    canManage: true,
     component: <CityMembers />,
     shouldShowOnSidebar: true,
     title: "Gestores",
