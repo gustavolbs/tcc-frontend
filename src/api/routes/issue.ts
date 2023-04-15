@@ -12,14 +12,9 @@ export const createIssue = (
 export const getIssue = (issueId: number) =>
   useFetch<Issue>(issueId ? `/issue/${issueId}` : null);
 
-export const getAllIssuesFromCity = (
-  cityId: number,
-  extraConfigs?: AxiosRequestConfig
-) =>
+export const getAllIssuesFromCity = (cityId: number, query?: string) =>
   useFetch<Issue[]>(
-    cityId ? `/issue/all/${cityId}` : null,
-    undefined,
-    extraConfigs
+    cityId ? `/issue/all/${cityId}${query ? `?${query}` : ""}` : null
   );
 
 export const exportAllIssuesFromCity = (
