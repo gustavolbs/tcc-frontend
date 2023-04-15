@@ -35,6 +35,7 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
     if (modal.mode === "add") {
       handleAdd(slugify(featureSlug), featureDescription);
       setFeatureSlug("");
+      setFeatureDescription("");
       onCloseModal();
     } else {
       handleEdit({
