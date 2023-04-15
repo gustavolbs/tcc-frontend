@@ -7,4 +7,26 @@ tbody {
 
 .leaflet-container {
   height: 24rem;
+
+  @media (min-width: 640px) {
+    min-height: 24rem;
+    height: 40vh;
+  }
+
+  @media (min-width: 1024px) {
+    height: 58vh;
+  }
+}
+
+.installable {
+  svg {
+    height: 2.5rem;
+    width: fit-content;
+  }
+}
+
+.react-responsive-modal-overlay,
+.react-responsive-modal-container,
+.react-responsive-modal-modal {
+  animation-fill-mode: forwards !important;
 }

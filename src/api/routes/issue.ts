@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 
 import { axiosInstance, useFetch } from "../instance";
 
@@ -12,8 +12,15 @@ export const createIssue = (
 export const getIssue = (issueId: number) =>
   useFetch<Issue>(issueId ? `/issue/${issueId}` : null);
 
-export const getAllIssuesFromCity = (cityId: number) =>
-  useFetch<Issue[]>(cityId ? `/issue/all/${cityId}` : null);
+export const getAllIssuesFromCity = (cityId: number, query?: string) =>
+  useFetch<Issue[]>(
+    cityId ? `/issue/all/${cityId}${query ? `?${query}` : ""}` : null
+  );
+
+export const exportAllIssuesFromCity = (
+  cityId: number,
+  extraConfigs?: AxiosRequestConfig
+) => axiosInstance.get(`/issue/all/${cityId}`, extraConfigs);
 
 export const getAllMyIssues = (cityId: number) =>
   useFetch<Issue[]>(cityId ? `/issue/all/${cityId}/mine` : null);

@@ -34,7 +34,7 @@ export const MembersTable: React.FC<MembersTableProps> = ({
   return (
     <div className="overflow-x-auto w-full">
       {!members?.length && !isLoadingMembers && (
-        <div>Nenhum resultado encontrado</div>
+        <div className="mt-4">Nenhum resultado encontrado</div>
       )}
 
       <table className="w-full mt-8 border-collapse text-sm md:text-base">

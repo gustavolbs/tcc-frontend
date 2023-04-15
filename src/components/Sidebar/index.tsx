@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { AiOutlineLogout } from "react-icons/ai";
+import React, { useEffect, useState } from "react";
+import { AiOutlineLock, AiOutlineLogout } from "react-icons/ai";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { useUser } from "../../contexts/UserContext";
 
-import { ROUTES } from "../../routes/routes";
+import { ADMIN_ROUTES, ROUTES } from "../../routes/routes";
 
 import { Box } from "../Box";
 import { Container } from "../Container";
@@ -21,7 +21,7 @@ import {
 export const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAdmin, logout } = useUser();
+  const { isAdmin, isResident, logout } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -33,6 +33,19 @@ export const Sidebar: React.FC = () => {
     return location.pathname === routePath;
   };
 
+  useEffect(() => {
+    const currentRoute = [...ROUTES, ...ADMIN_ROUTES].find(
+      (route) => route.path === location.pathname
+    );
+
+    const defaultTitle = "Fixed my city";
+    const currentRouteTitle = `${currentRoute?.title} | `;
+
+    if (currentRoute) {
+      document.title = `${currentRouteTitle}${defaultTitle}`;
+    }
+  }, [location]);
+
   return (
     <AppContainer>
       <SidebarContainer isMenuOpen={isMenuOpen}>
@@ -40,7 +53,7 @@ export const Sidebar: React.FC = () => {
 
         <div className="routes">
           {ROUTES.map((route) => {
-            if (route.isAdmin && !isAdmin) return null;
+            if (route?.canManage && isResident) return null;
 
             return (
               route.shouldShowOnSidebar && (
@@ -54,6 +67,29 @@ export const Sidebar: React.FC = () => {
               )
             );
           })}
+
+          {isAdmin && (
+            <div className="mt-10">
+              <SidebarLink to="#">
+                <AiOutlineLock /> Admin
+              </SidebarLink>
+              {ADMIN_ROUTES.map((route) => {
+                if (route.isAdmin && !isAdmin) return null;
+
+                return (
+                  route.shouldShowOnSidebar && (
+                    <SidebarLink
+                      key={route.path}
+                      to={route.path}
+                      $isRouteActive={isRouteActive(route.path)}
+                    >
+                      <svg /> {route.title}
+                    </SidebarLink>
+                  )
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <Logout onClick={handleLogout}>

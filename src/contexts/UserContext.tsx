@@ -6,18 +6,22 @@ import { api } from "../api/client";
 import { User } from "../interfaces/user";
 
 interface UserContextData {
+  isResident: boolean;
   isAdmin: boolean;
   isLoading: boolean;
   isOwner: boolean;
   logout: () => void;
+  setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>;
   user: User | null;
 }
 
 const UserContext = createContext<UserContextData>({
+  isResident: false,
   isAdmin: false,
   isLoading: true,
   isOwner: false,
   logout: () => {},
+  setCurrentUser: () => {},
   user: null,
 });
 
@@ -50,7 +54,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     localStorage.removeItem("myapp-token");
     setCurrentUser(null);
     setIsTokenValid(false);
-    mutate("/users/me", null); // invalida o cache do hook SWR
+    // mutate("/users/me", null); // invalida o cache do hook SWR -> Não lembro o motivo de ter adicionado
   };
 
   useEffect(() => {
@@ -59,6 +63,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     }
   }, [user]);
 
+  const isResident = currentUser?.role === "resident";
   const isAdmin = currentUser?.role === "admin";
   const isOwner = currentUser?.role === "owner";
 
@@ -69,11 +74,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({
   return (
     <UserContext.Provider
       value={{
+        isResident,
         isAdmin,
         isLoading,
         isOwner,
         logout,
         user: currentUser,
+        setCurrentUser,
       }}
     >
       {children}

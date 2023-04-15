@@ -10,7 +10,7 @@ import { Sidebar } from "../components/Sidebar";
 import { LoginForm } from "../views/LoginForm";
 import { RegisterForm } from "../views/RegisterForm";
 
-import { ROUTES } from "./routes";
+import { ADMIN_ROUTES, ROUTES } from "./routes";
 
 interface RoutesProps {
   isAuthenticated: boolean;
@@ -47,7 +47,7 @@ export const AppRoutes: React.FC<RoutesProps> = ({
           }
         />
         <Route element={<Sidebar />}>
-          {ROUTES.map(({ path, isPrivate, isAdmin, component }) => (
+          {ROUTES.map(({ path, isPrivate, component }) => (
             <Route
               key={path}
               path={path}
@@ -56,7 +56,18 @@ export const AppRoutes: React.FC<RoutesProps> = ({
                   <PrivateRoute isAuthenticated={isAuthenticated}>
                     {component}
                   </PrivateRoute>
-                ) : isAdmin ? (
+                ) : (
+                  component
+                )
+              }
+            />
+          ))}
+          {ADMIN_ROUTES.map(({ path, isAdmin, component }) => (
+            <Route
+              key={path}
+              path={path}
+              element={
+                isAdmin ? (
                   <AdminRoute isAuthenticated={isAuthenticated}>
                     {component}
                   </AdminRoute>
