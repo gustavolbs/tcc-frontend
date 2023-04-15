@@ -6,6 +6,7 @@ import { api } from "../api/client";
 import { User } from "../interfaces/user";
 
 interface UserContextData {
+  isResident: boolean;
   isAdmin: boolean;
   isLoading: boolean;
   isOwner: boolean;
@@ -15,6 +16,7 @@ interface UserContextData {
 }
 
 const UserContext = createContext<UserContextData>({
+  isResident: false,
   isAdmin: false,
   isLoading: true,
   isOwner: false,
@@ -61,6 +63,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     }
   }, [user]);
 
+  const isResident = currentUser?.role === "resident";
   const isAdmin = currentUser?.role === "admin";
   const isOwner = currentUser?.role === "owner";
 
@@ -71,6 +74,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
   return (
     <UserContext.Provider
       value={{
+        isResident,
         isAdmin,
         isLoading,
         isOwner,

@@ -21,7 +21,7 @@ import {
 export const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAdmin, logout } = useUser();
+  const { isAdmin, isResident, logout } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -53,6 +53,8 @@ export const Sidebar: React.FC = () => {
 
         <div className="routes">
           {ROUTES.map((route) => {
+            if (route?.canManage && isResident) return null;
+
             return (
               route.shouldShowOnSidebar && (
                 <SidebarLink
