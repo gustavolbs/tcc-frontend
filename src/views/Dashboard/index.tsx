@@ -77,9 +77,11 @@ export const Dashboard: React.FC = () => {
           <div className="w-full md:w-1/2 sm:max-w-[17rem]">
             <span className="md:text-lg">Período filtrado:</span>
             <Datepicker
-              primaryColor={"blue"}
+              readOnly
+              inputClassName="w-full border-2 rounded-md px-2 py-1"
+              primaryColor="blue"
               maxDate={new Date()}
-              separator={"até"}
+              separator="até"
               value={date}
               onChange={handleValueChange}
               showShortcuts
