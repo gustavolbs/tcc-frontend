@@ -54,7 +54,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     localStorage.removeItem("myapp-token");
     setCurrentUser(null);
     setIsTokenValid(false);
-    mutate("/users/me", null); // invalida o cache do hook SWR
+    // mutate("/users/me", null); // invalida o cache do hook SWR -> Avaliar porque tinha colocado essa linha
   };
 
   useEffect(() => {
