@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import Datepicker from "react-tailwindcss-datepicker";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { LatLngExpression } from "leaflet";
 
 import { IssuesTable } from "../../components/IssuesTable";
 import { ButtonLayout } from "../../components/ButtonLayout";
@@ -73,7 +75,7 @@ export const Dashboard: React.FC = () => {
       <span>Acompanhe aqui todas as solicitações feitas em sua cidade.</span>
 
       {!isResident ? (
-        <div className="flex flex-col md:flex-row mt-4 w-full">
+        <div className="flex flex-col md:flex-row mt-4 w-full z-[9999]">
           <div className="w-full md:w-1/2 sm:max-w-[17rem]">
             <span className="md:text-lg">Período filtrado:</span>
             <Datepicker
@@ -110,7 +112,38 @@ export const Dashboard: React.FC = () => {
         </div>
       ) : null}
 
-      <IssuesTable issues={issues} isLoading={isLoadingIssues} />
+      <div className="w-full 2xl:flex gap-8">
+        <details open className="map-container w-full mt-4">
+          <summary className="text-start text-xl cursor-pointer">
+            Mapa de calor
+          </summary>
+
+          {isLoadingIssues && <Skeleton height={400} />}
+          {issues?.length ? (
+            <MapContainer
+              center={[city?.latitude, city?.longitude] as LatLngExpression}
+              zoom={13}
+              scrollWheelZoom
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {issues?.map((issue) => (
+                <Marker
+                  position={
+                    [issue?.latitude, issue?.longitude] as LatLngExpression
+                  }
+                />
+              ))}
+            </MapContainer>
+          ) : null}
+        </details>
+
+        <div className="w-full 2xl:mt-3">
+          <IssuesTable issues={issues} isLoading={isLoadingIssues} />
+        </div>
+      </div>
     </>
   );
 };
