@@ -51,7 +51,7 @@ export const ViewIssue: React.FC = () => {
     const field = (e.target as any)?.name as string;
 
     try {
-      const fieldResponse = field === "fiscal" ? "Fiscal" : "Gestor";
+      const fieldResponse = field === "manager" ? "Gestor" : "Fiscal";
 
       await api.updateIssueAssignees(String(issueId), field, Number(user?.id));
       notify("success", `${fieldResponse} atualizado com sucesso!`);

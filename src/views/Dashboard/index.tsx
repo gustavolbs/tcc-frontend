@@ -19,7 +19,7 @@ export const Dashboard: React.FC = () => {
   const { city, isLoading: isLoadingCity } = useCity();
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState({
-    startDate: new Date().toISOString().split("T")[0],
+    startDate: new Date().toISOString().split("T")[0].slice(0, -2) + "01", // FIRST DAY OF MONTH
     endDate: new Date().toISOString().split("T")[0],
   });
 
@@ -119,7 +119,7 @@ export const Dashboard: React.FC = () => {
           </summary>
 
           {isLoadingIssues && <Skeleton height={400} />}
-          {issues?.length ? (
+          {issues?.length && city?.latitude ? (
             <MapContainer
               center={[city?.latitude, city?.longitude] as LatLngExpression}
               zoom={13}
