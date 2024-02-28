@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import Datepicker from "react-tailwindcss-datepicker";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
+import Switch from "react-switch";
+
+import { FFS } from "../../interfaces/feature-flag";
 
 import { IssuesTable } from "../../components/IssuesTable";
 import { ButtonLayout } from "../../components/ButtonLayout";
+import { ColoredMarker } from "../../components/ColoredMarker";
+import { HeatMap } from "../../components/HeatMap";
 
 import { api } from "../../api/client";
 
@@ -16,11 +21,16 @@ import { useUser } from "../../contexts/UserContext";
 
 export const Dashboard: React.FC = () => {
   const { user, isResident } = useUser();
-  const { city, isLoading: isLoadingCity } = useCity();
+  const { city, isLoading: isLoadingCity, isFeatureEnabled } = useCity();
+  const enableMapMarkers = isFeatureEnabled(FFS.DASHBOARD_MAP_MARKERS);
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState({
     startDate: new Date().toISOString().split("T")[0].slice(0, -2) + "01", // FIRST DAY OF MONTH
     endDate: new Date().toISOString().split("T")[0],
+  });
+  const [markers, setMarkers] = useState({
+    pin: true,
+    heat: false,
   });
 
   const handleValueChange = (newDate: any) => {
@@ -35,6 +45,13 @@ export const Dashboard: React.FC = () => {
           `startDate=${date.startDate}&endDate=${date.endDate}`
       : ""
   );
+
+  const handleToggleMarkers = (markerType: "pin" | "heat") => {
+    setMarkers((prevMarkers) => ({
+      ...prevMarkers,
+      [markerType]: !prevMarkers[markerType],
+    }));
+  };
 
   const handleExport = async () => {
     setIsLoading(true);
@@ -118,6 +135,55 @@ export const Dashboard: React.FC = () => {
             Mapa de calor
           </summary>
 
+          {!isResident && enableMapMarkers ? (
+            <div className="flex flex-col gap-2 my-4 w-full z-[9999]">
+              <div className="w-full md:w-1/2 sm:max-w-[17rem]">
+                <span className="md:text-lg">Marcadores</span>
+              </div>
+              <label
+                htmlFor="pin"
+                className="flex items-center gap-4 cursor-pointer"
+              >
+                <Switch
+                  name="pin"
+                  onChange={() => handleToggleMarkers("pin")}
+                  checked={markers.pin}
+                  onColor="#a5f3fc"
+                  onHandleColor="#2693e6"
+                  handleDiameter={30}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                  activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                  height={20}
+                  width={60}
+                />
+                <span>Alfinete</span>
+              </label>
+
+              <label
+                htmlFor="heat"
+                className="flex items-center gap-4 cursor-pointer"
+              >
+                <Switch
+                  name="heat"
+                  onChange={() => handleToggleMarkers("heat")}
+                  checked={markers.heat}
+                  onColor="#a5f3fc"
+                  onHandleColor="#2693e6"
+                  handleDiameter={30}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                  activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                  height={20}
+                  width={60}
+                />
+                <span>Heat</span>
+              </label>
+            </div>
+          ) : null}
+
           {isLoadingIssues && <Skeleton height={400} />}
           {issues?.length && city?.latitude ? (
             <MapContainer
@@ -129,13 +195,21 @@ export const Dashboard: React.FC = () => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              {issues?.map((issue) => (
-                <Marker
-                  position={
-                    [issue?.latitude, issue?.longitude] as LatLngExpression
-                  }
-                />
-              ))}
+              {issues?.length && markers.heat && (
+                <HeatMap issues={issues} visible={markers.heat} />
+              )}
+
+              {markers.pin &&
+                issues?.map((issue, idx) => (
+                  <ColoredMarker
+                    key={`marker#${idx}`}
+                    position={
+                      [issue?.latitude, issue?.longitude] as LatLngExpression
+                    }
+                    type={issue.category as any}
+                    id={issue.id}
+                  />
+                ))}
             </MapContainer>
           ) : null}
         </details>
