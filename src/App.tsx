@@ -11,19 +11,19 @@ import { CityProvider } from "./contexts/CityContext";
 import "./index.css";
 import "./app.scss";
 import "leaflet/dist/leaflet.css";
+import "leaflet.heat/dist/leaflet-heat.js";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-responsive-modal/styles.css";
 
-import iconUrl from "./assets/marker-icon.png";
 import shadowUrl from "./assets/marker-shadow.png";
-import iconRetinaUrl from "./assets/marker-icon-2x.png";
+import marker from "./assets/marker.svg";
 
 import logoSVG from "./assets/logo-128.svg";
 
 let DefaultIcon = L.icon({
-  iconUrl,
+  iconUrl: marker,
   shadowUrl,
-  iconRetinaUrl,
+  iconRetinaUrl: marker,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],

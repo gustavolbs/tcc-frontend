@@ -5,6 +5,31 @@ tbody {
   }
 }
 
+@mixin hue-rotate($degree) {
+  &.hue-rotate-#{$degree} {
+    filter: hue-rotate(#{$degree}deg);
+  }
+}
+
+.hue-rotate-45deg {
+  filter: hue-rotate(45deg);
+}
+.hue-rotate-90deg {
+  filter: hue-rotate(90deg);
+}
+.hue-rotate-135deg {
+  filter: hue-rotate(135deg);
+}
+.hue-rotate-180deg {
+  filter: hue-rotate(180deg);
+}
+.hue-rotate-245deg {
+  filter: hue-rotate(245deg);
+}
+.hue-rotate-335deg {
+  filter: hue-rotate(335deg);
+}
+
 .leaflet-container {
   height: 24rem;
 
